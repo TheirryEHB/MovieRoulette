@@ -1,29 +1,36 @@
 package com.example.movieroulette
 
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapter(private val dataSet: Array<String>):
+class CustomAdapter(private val dataSet: ArrayList<String>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
-    class ViewHolder(view: recycleview_irem): RecyclerView.ViewHolder(view){
-        val titleView: textTitle
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+        var titleView: TextView
 
-        init{}
+        init{
+            titleView = view.findViewById(R.id.textTitle)
+
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder{
 
-        val view = LayoutInlater.from(viewGroup.context)
-            .inlate(R.layout.textTitle, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.recycle_front, viewGroup, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val itemsData = dataSet[position]
+        holder.titleView.text = itemsData
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return dataSet.size
     }
 }

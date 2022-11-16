@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
+import com.example.movieroulette.database.DBHelper as DBHelper
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,15 +19,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Make top week movies url
         val topWeekUrl = getTrendingMoviesOfWeek()
-
+        //Make recyclerView
         val recyclerView: RecyclerView = findViewById(R.id.front_recycle_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-
+        //Get data and fill recyclerView
         val job = runBlocking { getData(topWeekUrl) }
-        val adapter = CustomAdapter(data)
         recyclerView.adapter = adapter
+        //Make databse and table for chosen movies and new game
+        val db = DBHelper(this)
     }
 
     suspend fun getData(topWeekUrl: String) = coroutineScope{
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 if (jsonob != null) {
                     val movieRes = jsonob.getJSONArray("results")
                     for (i in 0 until movieRes.length()) {
-                        Log.d("sss", movieRes.getJSONObject(i).toString())
+//                        Log.d("sss", movieRes.getJSONObject(i).toString())
                         data.add(movieRes.getJSONObject(i))
                     }
                 }
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    val adapter = CustomAdapter(data)
+
+
 
     fun getAPIKey(): String {
         return "api_key=8ff2d545fa19ee5ef1d52be200306079"

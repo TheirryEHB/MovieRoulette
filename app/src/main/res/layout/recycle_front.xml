@@ -6,8 +6,9 @@
     android:id="@+id/front_recycle_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingStart="25dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="20dp"
     >
 
         <TextView
@@ -36,17 +37,43 @@
             app:layout_constraintTop_toTopOf="@+id/textTitle"
             app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:id="@+id/textRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textLang"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.31"
+            app:layout_constraintStart_toEndOf="@+id/textLang"
+            app:layout_constraintTop_toTopOf="@+id/textLang"
+            app:layout_constraintVertical_bias="0.0" />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:minHeight="50dp"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintHorizontal_bias="0.051"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTitle"
-            app:layout_constraintVertical_bias="0.044" />
+            app:layout_constraintVertical_bias="0.035" />
+
+        <TextView
+            android:id="@+id/textRelease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:minWidth="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.142" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

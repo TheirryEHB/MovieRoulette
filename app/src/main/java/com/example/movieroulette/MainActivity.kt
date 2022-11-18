@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val topWeekUrl = getTrendingMoviesOfWeek()
         //Make recyclerView
         val recyclerView: RecyclerView = findViewById(R.id.front_recycle_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         //Get data and fill recyclerView
         val job = runBlocking { getData(topWeekUrl) }
         recyclerView.adapter = adapter

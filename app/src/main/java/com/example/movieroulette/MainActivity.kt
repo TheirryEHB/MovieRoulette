@@ -1,23 +1,41 @@
 package com.example.movieroulette
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import com.example.movieroulette.database.RoomDBHelper
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
-import com.example.movieroulette.database.DBHelper as DBHelper
+import com.google.firebase.firestore.FirebaseFirestore
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
     private val data = ArrayList<JSONObject>()
+
+    val room = RoomDBHelper()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Firebase
+        room.FirebaseDb = FirebaseFirestore.getInstance()
+        //RoomDb
+        room.db = Room.databaseBuilder(
+                applicationContext,
+            RoomDBHelper.AppDatabase::class.java, "DB1"
+                ).build()
 
         //Make top week movies url
         val topWeekUrl = getTrendingMoviesOfWeek()
@@ -27,8 +45,30 @@ class MainActivity : AppCompatActivity() {
         //Get data and fill recyclerView
         val job = runBlocking { getData(topWeekUrl) }
         recyclerView.adapter = adapter
-        //Make databse and table for chosen movies and new game
-        val db = DBHelper(this)
+
+        val newGameButton = findViewById<Button>(R.id.new_game_button)
+        newGameButton.setOnClickListener {
+            //Chose game mode based on arraylength
+            //...
+            //random int between 0 and 1
+            //...
+            //Inport set number of questions
+            //Make Friendsgame for every question
+            //Add chosen movies to databse with Id of questions && foreinkey to Friendsgame
+            if (RoomDBHelper.chosenMovieArr.size < 2 )
+                Toast.makeText(this,
+                    "Choose at least twoo movies.", Toast.LENGTH_SHORT).show()
+            else{
+                if (RoomDBHelper.chosenMovieArr.size == 2)
+                    startLoversGame()
+                else if (RoomDBHelper.chosenMovieArr.size > 2)
+                    startFriendsGame()
+            }
+
+        }
+
+
+
     }
 
     suspend fun getData(topWeekUrl: String) = coroutineScope{
@@ -53,8 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     val adapter = CustomAdapter(data)
 
-
-
     fun getAPIKey(): String {
         return "api_key=8ff2d545fa19ee5ef1d52be200306079"
     }
@@ -73,5 +111,14 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return jsonObject
+    }
+
+
+    fun startLoversGame(){
+        val intent = Intent(this, LoversgameActivity::class.java)
+        startActivity(intent)
+    }
+    fun startFriendsGame(){
+
     }
 }

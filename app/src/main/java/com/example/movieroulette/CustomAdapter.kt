@@ -8,13 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieroulette.database.RoomDBHelper
 import org.json.JSONObject
 
 class CustomAdapter(private val dataSet: ArrayList<JSONObject>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
-    var chosenMovieArr: ArrayList<MovieModel> = ArrayList()
-
+    val room = RoomDBHelper()
+    var chosenMovies = RoomDBHelper.chosenMovieArr
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         var headElement: ConstraintLayout
         var titleView: TextView
@@ -55,7 +56,27 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             movie.name = itemsData.getString("original_title")
             movie.rating = itemsData.getString("vote_average")
             movie.release = itemsData.getString("release_date")
-            chosenMovieArr.add(movie)
+
+            if (chosenMovies.size >= 5){
+                Toast.makeText(holder.headElement.context,
+                    "Max number of movies is 5", Toast.LENGTH_LONG).show()
+            }
+            else{
+//                if(chosenMovies.size >= 1) {
+//                    for (m in chosenMovies) {
+//                        if (m.id == movie.id)
+//                            Toast.makeText(
+//                                holder.headElement.context,
+//                                "Movie already added",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        else
+//                            chosenMovies.add(movie)
+//                    }
+//                }
+//                else
+                    chosenMovies.add(movie)
+            }
         }
 
     }

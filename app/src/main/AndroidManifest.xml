@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieRoulette">
         <activity
+            android:name=".MovieBetweenFriends"
+            android:exported="false" />
+        <activity
             android:name=".LoversgameActivity"
             android:exported="false" />
         <activity

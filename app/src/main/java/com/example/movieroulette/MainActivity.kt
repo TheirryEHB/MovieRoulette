@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Firebase
-        room.FirebaseDb = FirebaseFirestore.getInstance()
         //RoomDb
         room.db = Room.databaseBuilder(
                 applicationContext,
@@ -54,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             //random int between 0 and 1
             //...
             //Inport set number of questions
+            //Put questions into array
             //Make Friendsgame for every question
             //Add chosen movies to databse with Id of questions && foreinkey to Friendsgame
             if (RoomDBHelper.chosenMovieArr.size < 2 )
@@ -120,6 +119,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
     fun startFriendsGame(){
-
+        val intent = Intent(this, MovieBetweenFriends::class.java)
+        startActivity(intent)
     }
 }

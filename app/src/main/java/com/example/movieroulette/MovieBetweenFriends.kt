@@ -2,19 +2,22 @@ package com.example.movieroulette
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import com.example.movieroulette.database.FirebaseDBHelper
 import com.example.movieroulette.database.RoomDBHelper
 
-class LoversgameActivity : AppCompatActivity() {
+class MovieBetweenFriends : AppCompatActivity() {
+
+    val firebase: FirebaseDBHelper = FirebaseDBHelper()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_loversgame)
+        setContentView(R.layout.activity_movie_between_friends)
 
-        val randomNumber = (0..1).random()
-        val winningMovie = RoomDBHelper.chosenMovieArr.get(randomNumber)
+        makeNewGame()
+    }
 
-        val titleText = findViewById<TextView>(R.id.textTitle)
-        titleText.text = winningMovie.name
+
+    fun makeNewGame(){
+        firebase.getQnA()
     }
 
     override fun onBackPressed() {

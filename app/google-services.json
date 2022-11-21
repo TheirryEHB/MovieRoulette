@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "178138981676",
+    "firebase_url": "https://movieroulette-1c9b5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "movieroulette-1c9b5",
+    "storage_bucket": "movieroulette-1c9b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178138981676:android:623421f8ae166c99c9f889",
+        "android_client_info": {
+          "package_name": "com.example.movieroulette"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178138981676-uit24o7871n9gb10fm0gvv7ra5796g4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC18X6FGlZi_VSojq2pd5G31u_uLTozqmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178138981676-uit24o7871n9gb10fm0gvv7ra5796g4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

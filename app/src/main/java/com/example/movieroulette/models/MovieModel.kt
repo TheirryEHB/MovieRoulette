@@ -1,4 +1,4 @@
-package com.example.movieroulette
+package com.example.movieroulette.models
 
 class MovieModel {
     var id: String = ""

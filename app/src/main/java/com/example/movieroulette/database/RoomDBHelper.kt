@@ -1,9 +1,7 @@
 package com.example.movieroulette.database
 
 import androidx.room.*
-import com.example.movieroulette.MovieModel
-import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.movieroulette.models.MovieModel
 
 class RoomDBHelper {
 
@@ -12,8 +10,6 @@ class RoomDBHelper {
     companion object {
         var chosenMovieArr: ArrayList<MovieModel> = ArrayList()
     }
-    var FirebaseDb: FirebaseFirestore? = null
-        get() {return field}
 
     @Entity
     data class FriendsGame(

@@ -2,6 +2,8 @@ package com.example.movieroulette.database
 
 import androidx.room.*
 import com.example.movieroulette.models.MovieModel
+import org.json.JSONException
+import org.json.JSONObject
 
 class RoomDBHelper {
 
@@ -9,6 +11,16 @@ class RoomDBHelper {
         get() { return field }
     companion object {
         var chosenMovieArr: ArrayList<MovieModel> = ArrayList()
+
+        fun parse(json: String): JSONObject? {
+            var jsonObject: JSONObject? = null
+            try {
+                jsonObject = JSONObject(json)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            return jsonObject
+        }
     }
 
     @Entity

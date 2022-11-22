@@ -23,7 +23,7 @@ class RoomDBHelper {
         }
     }
 
-    @Entity
+    @Entity(tableName = "friendsgame")
     data class FriendsGame(
         @PrimaryKey(autoGenerate = true) val uid: Int?,
         @ColumnInfo(name = "quest_id") val QuestId: String?,
@@ -44,6 +44,9 @@ class RoomDBHelper {
 
         @Query("SELECT answer_time FROM friendsgame WHERE uid IN (:gameIds)")
         fun loadAllByIds(gameIds: IntArray): List<FriendsGame>
+
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        fun insertGame(game: FriendsGame)
     }
 
     @Entity

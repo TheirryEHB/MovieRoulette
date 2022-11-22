@@ -1,6 +1,7 @@
 package com.example.movieroulette.models
 
 class QnAModel {
+    var id : String = ""
     var question : String = ""
-    var Answer : String = ""
+    var answer : String = ""
 }

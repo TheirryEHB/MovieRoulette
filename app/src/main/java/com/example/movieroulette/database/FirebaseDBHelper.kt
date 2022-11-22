@@ -21,15 +21,17 @@ class FirebaseDBHelper {
 //        get() {return field}
 
 
-    fun getQnA(){
+    suspend fun getQnA(): ArrayList<QnAModel> {
        database.addListenerForSingleValueEvent(object : ValueEventListener{
            override fun onDataChange(p0: DataSnapshot) {
                val children = p0.children
                children.forEach{
+                   Log.d("ccc", it.toString())
                    val job = RoomDBHelper.parse(it.getValue().toString())
                    val qm = QnAModel()
                    if (job != null) {
-                       qm.Answer = job.getString("answer")
+//                       qm.id = it.key
+                       qm.answer = job.getString("answer")
                        qm.question = job.getString("question")
                        questionArr.add(qm)
                    }
@@ -42,6 +44,7 @@ class FirebaseDBHelper {
            }
 
        })
+        return questionArr
     }
 
 

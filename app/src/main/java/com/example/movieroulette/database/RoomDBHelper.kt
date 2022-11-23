@@ -1,5 +1,6 @@
 package com.example.movieroulette.database
 
+import android.content.Context
 import androidx.room.*
 import com.example.movieroulette.models.MovieModel
 import org.json.JSONException
@@ -23,7 +24,7 @@ class RoomDBHelper {
         }
     }
 
-    @Entity(tableName = "friendsgame")
+    @Entity(tableName = "FriendsGame")
     data class FriendsGame(
         @PrimaryKey(autoGenerate = true) val uid: Int?,
         @ColumnInfo(name = "quest_id") val QuestId: String?,
@@ -46,7 +47,7 @@ class RoomDBHelper {
         fun loadAllByIds(gameIds: IntArray): List<FriendsGame>
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        fun insertGame(game: FriendsGame)
+        fun insertGame(fi: FriendsGame)
     }
 
     @Entity
@@ -80,6 +81,21 @@ class RoomDBHelper {
     abstract class AppDatabase : RoomDatabase() {
         abstract fun FriendsGameDao() : FriendsGameDao
         abstract fun ChosenMovieDao() : ChosenMovieDao
+
+//        companion object{
+//            private var friendsDBInstance: AppDatabase? = null
+//            fun getDatabase(context: Context): AppDatabase {
+//                return friendsDBInstance ?: synchronized(this){
+//                    val instance = Room.databaseBuilder(
+//                        context.applicationContext,
+//                        AppDatabase::class.java,
+//                        "friends_game_database"
+//                    ).build()
+//                    friendsDBInstance = instance
+//                    instance
+//                }
+//            }
+//        }
 
     }
 

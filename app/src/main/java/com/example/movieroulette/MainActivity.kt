@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         //RoomDb
         room.db = Room.databaseBuilder(
                 applicationContext,
-            RoomDBHelper.AppDatabase::class.java, "DB1"
-                ).build()
+                RoomDBHelper.AppDatabase::class.java, "DB1"
+        ).build()
 
         //Make top week movies url
         val topWeekUrl = getTrendingMoviesOfWeek()

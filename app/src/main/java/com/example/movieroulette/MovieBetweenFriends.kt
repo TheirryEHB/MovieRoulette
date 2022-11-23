@@ -13,10 +13,18 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     val firebase: FirebaseDBHelper = FirebaseDBHelper()
     val room: RoomDBHelper = RoomDBHelper()
+    private lateinit var friendsDao: RoomDBHelper.FriendsGameDao
+    private lateinit var db: RoomDBHelper.AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_between_friends)
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            RoomDBHelper.AppDatabase::class.java, "DB1"
+        ).build()
+        friendsDao = db.FriendsGameDao()
 
         makeNewGame()
     }
@@ -32,8 +40,8 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     suspend fun insertGameinDB(questArray: ArrayList<QnAModel>){
         questArray.forEach {
-//            RoomDBHelper.FriendsGame.
-//            RoomDBHelper.FriendsGameDao.insertGame(it)
+            friendsDao.insertGame(RoomDBHelper.FriendsGame(0, it.id, false, false, 0))
+
         }
 
     }

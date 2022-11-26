@@ -20,7 +20,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     val room: RoomDBHelper = RoomDBHelper()
     private lateinit var friendsDao: RoomDBHelper.FriendsGameDao
     private lateinit var db: RoomDBHelper.AppDatabase
-    private var gameArray: ArrayList<RoomDBHelper.FriendsGame> = ArrayList()
+    private var gameArray: List<RoomDBHelper.FriendsGame> = ArrayList()
 
     val titleTextview = findViewById<TextView>(R.id.title_text_view)
 
@@ -46,7 +46,7 @@ class MovieBetweenFriends : AppCompatActivity() {
             val job3 = runBlocking { getCurrentGames() }
 
             for (i in 0..questArr.size){
-                questArr.get(i).movieName = RoomDBHelper.chosenMovieArr.get(0).name
+                questArr.get(i).movieName = RoomDBHelper.chosenMovieArr.get(i).name
             }
 
             titleTextview.text = gameArray.get(0).MovieName

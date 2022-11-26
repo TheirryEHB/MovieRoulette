@@ -35,7 +35,7 @@ class RoomDBHelper {
     @Dao
     interface FriendsGameDao{
         @Query("SELECT * FROM FriendsGame")
-        fun getAll(): ArrayList<FriendsGame>
+        fun getAll(): List<FriendsGame>
 
         @Query("SELECT uid FROM FriendsGame WHERE did_ans = :ans")
         fun findByAnswer(ans: String):FriendsGame
@@ -44,7 +44,7 @@ class RoomDBHelper {
         fun findByRight(right: String):FriendsGame
 
         @Query("SELECT answer_time FROM friendsgame WHERE uid IN (:gameIds)")
-        fun loadAllByIds(gameIds: IntArray): ArrayList<FriendsGame>
+        fun loadAllByIds(gameIds: IntArray): List<FriendsGame>
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertGame(fi: FriendsGame)

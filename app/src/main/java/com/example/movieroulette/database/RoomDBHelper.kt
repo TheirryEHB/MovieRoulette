@@ -1,6 +1,5 @@
 package com.example.movieroulette.database
 
-import android.content.Context
 import androidx.room.*
 import com.example.movieroulette.models.MovieModel
 import org.json.JSONException
@@ -27,6 +26,7 @@ class RoomDBHelper {
     @Entity(tableName = "FriendsGame")
     data class FriendsGame(
         @PrimaryKey(autoGenerate = true) val uid: Int?,
+        @ColumnInfo(name = "movie_name") val MovieName: String?,
         @ColumnInfo(name = "quest_id") val QuestId: String?,
         @ColumnInfo(name = "did_ans") val DidAns: Boolean?,
         @ColumnInfo(name = "is_right") val isRight: Boolean?,
@@ -35,7 +35,7 @@ class RoomDBHelper {
     @Dao
     interface FriendsGameDao{
         @Query("SELECT * FROM FriendsGame")
-        fun getAll(): List<FriendsGame>
+        fun getAll(): ArrayList<FriendsGame>
 
         @Query("SELECT uid FROM FriendsGame WHERE did_ans = :ans")
         fun findByAnswer(ans: String):FriendsGame
@@ -44,10 +44,13 @@ class RoomDBHelper {
         fun findByRight(right: String):FriendsGame
 
         @Query("SELECT answer_time FROM friendsgame WHERE uid IN (:gameIds)")
-        fun loadAllByIds(gameIds: IntArray): List<FriendsGame>
+        fun loadAllByIds(gameIds: IntArray): ArrayList<FriendsGame>
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertGame(fi: FriendsGame)
+
+        @Query("DELETE FROM FriendsGame")
+        fun nukeTable()
     }
 
     @Entity

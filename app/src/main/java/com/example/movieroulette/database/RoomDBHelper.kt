@@ -1,5 +1,6 @@
 package com.example.movieroulette.database
 
+import android.util.Log
 import androidx.room.*
 import com.example.movieroulette.models.MovieModel
 import org.json.JSONException
@@ -19,6 +20,7 @@ class RoomDBHelper {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
+            Log.e("jsob", jsonObject.toString())
             return jsonObject
         }
     }

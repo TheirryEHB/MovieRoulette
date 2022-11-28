@@ -10,32 +10,36 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 class FirebaseDBHelper {
 
 
     val database = Firebase.database.getReference("QNA")
-    var questionArr = ArrayList<QnAModel>()
-    var random = Math.floor((Math.random() * RoomDBHelper.chosenMovieArr.size));
+    companion object {
+        var questionArr = ArrayList<QnAModel>()
+        var random = Math.floor((Math.random() * RoomDBHelper.chosenMovieArr.size))
+    }
 //    val firebaseDb = FirebaseFirestore.getInstance()
 //        get() {return field}
 
 
     suspend fun getQnA(): ArrayList<QnAModel> {
-       database.addListenerForSingleValueEvent(object : ValueEventListener{
+
+       database.addListenerForSingleValueEvent(object : ValueEventListener {
            override fun onDataChange(p0: DataSnapshot) {
                val children = p0.children
-               children.forEach{
-                   Log.d("ccc", it.toString())
-                   val job = RoomDBHelper.parse(it.getValue().toString())
+               children.forEach {
                    val qm = QnAModel()
-                   if (job != null) {
-//                       qm.id = it.key
-                       qm.answer = job.getString("answer")
-                       qm.question = job.getString("question")
-                       questionArr.add(qm)
-                   }
 
+                   if (it != null) {
+                       qm.id = it.key.toString()
+                       qm.answer = it.child("answer").value.toString()
+                       qm.question = it.child("question").value.toString()
+                       questionArr.add(qm)
+                       Log.e("ededsize", questionArr.size.toString())
+                   }
                }
            }
 
@@ -43,7 +47,10 @@ class FirebaseDBHelper {
                Log.e("FirebaseError", "loadPost:onCancelled", p0.toException())
            }
 
-       })
+           })
+
+        delay(2000L)
+        Log.e("ededsizes", questionArr.size.toString())
         return questionArr
     }
 

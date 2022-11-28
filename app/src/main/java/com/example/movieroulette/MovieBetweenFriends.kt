@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
 
 class MovieBetweenFriends : AppCompatActivity() {
 
@@ -23,6 +24,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     private var gameArray: List<RoomDBHelper.FriendsGame> = ArrayList()
 
     private lateinit var titleTextview: TextView
+    var questArr: ArrayList<QnAModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,25 +38,39 @@ class MovieBetweenFriends : AppCompatActivity() {
         ).build()
         friendsDao = db.FriendsGameDao()
 
-        runBlocking { launch{makeNewGame()}}
-    }
-
-
-    suspend fun makeNewGame() = coroutineScope {
-
-        var questArr: ArrayList<QnAModel> = ArrayList()
-        nukeTable()
-        launch{questArr = firebase.getQnA()}
-        launch{insertGameinDB(questArr)}
-        launch{
-            getCurrentGames()
-            for (i in 0..questArr.size){
-                questArr.get(i).movieName = RoomDBHelper.chosenMovieArr.get(i).name
+//        runBlocking { launch{makeNewGame()}}\
+        thread {
+            runBlocking {
+                launch { questArr = firebase.getQnA() }
+                launch{ makeNewGame() }
+                launch { fillInView() }
             }
-
-            titleTextview.text = gameArray.get(0).MovieName
         }
 
+
+
+    }
+
+    private suspend fun fillInView(){
+        titleTextview.text = questArr[0].toString()
+    }
+
+    private suspend fun makeNewGame() = coroutineScope {
+
+
+
+        nukeTable()
+        insertGameinDB(questArr)
+        firebase.getQnA()
+        questArr
+
+//        for (i in 0..questArr.size){
+//            questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
+//        }
+//        titleTextview.text = gameArray[0].MovieName
+
+
+        getCurrentGames()
 
 
     }
@@ -67,8 +83,8 @@ class MovieBetweenFriends : AppCompatActivity() {
             }
         }
     }
-    private suspend fun nukeTable() = coroutineScope{ launch {friendsDao.nukeTable() }}
-    private suspend fun getCurrentGames () = coroutineScope { launch {gameArray = friendsDao.getAll()} }
+    private suspend fun nukeTable() = coroutineScope{ launch{ friendsDao.nukeTable() }}
+    private suspend fun getCurrentGames () = coroutineScope { launch{ gameArray = friendsDao.getAll() }}
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

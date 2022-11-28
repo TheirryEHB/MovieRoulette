@@ -22,11 +22,13 @@ class MovieBetweenFriends : AppCompatActivity() {
     private lateinit var db: RoomDBHelper.AppDatabase
     private var gameArray: List<RoomDBHelper.FriendsGame> = ArrayList()
 
-    val titleTextview = findViewById<TextView>(R.id.title_text_view)
+    private lateinit var titleTextview: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_between_friends)
+
+        titleTextview = findViewById(R.id.title_text_view)
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -34,23 +36,26 @@ class MovieBetweenFriends : AppCompatActivity() {
         ).build()
         friendsDao = db.FriendsGameDao()
 
-        makeNewGame()
+        runBlocking { launch{makeNewGame()}}
     }
 
 
-    fun makeNewGame(){
-        val job = runBlocking {
-            val job1 = runBlocking { nukeTable() }
-            val questArr = firebase.getQnA()
-            val job2 = runBlocking { insertGameinDB(questArr)}
-            val job3 = runBlocking { getCurrentGames() }
+    suspend fun makeNewGame() = coroutineScope {
 
+        var questArr: ArrayList<QnAModel> = ArrayList()
+        nukeTable()
+        launch{questArr = firebase.getQnA()}
+        launch{insertGameinDB(questArr)}
+        launch{
+            getCurrentGames()
             for (i in 0..questArr.size){
                 questArr.get(i).movieName = RoomDBHelper.chosenMovieArr.get(i).name
             }
 
             titleTextview.text = gameArray.get(0).MovieName
         }
+
+
 
     }
 

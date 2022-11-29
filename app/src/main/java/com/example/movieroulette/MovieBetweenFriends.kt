@@ -10,9 +10,7 @@ import com.example.movieroulette.database.RoomDBHelper
 import com.example.movieroulette.models.FriendsGameModel
 import com.example.movieroulette.models.QnAModel
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 
 class MovieBetweenFriends : AppCompatActivity() {
@@ -38,40 +36,32 @@ class MovieBetweenFriends : AppCompatActivity() {
         ).build()
         friendsDao = db.FriendsGameDao()
 
-//        runBlocking { launch{makeNewGame()}}\
-        thread {
-            runBlocking {
-                launch { questArr = firebase.getQnA() }
-                launch{ makeNewGame() }
-                launch { fillInView() }
-            }
+        thread { makeNewGame() }
+
+
+
+    }
+
+    private suspend fun fillInView(index: Int){
+        GlobalScope.launch(Dispatchers.Main) {
+            titleTextview.text = gameArray[index].MovieName
         }
-
-
-
     }
 
-    private suspend fun fillInView(){
-        titleTextview.text = questArr[0].toString()
-    }
-
-    private suspend fun makeNewGame() = coroutineScope {
-
-
+    private  fun makeNewGame() = runBlocking {
 
         nukeTable()
-        insertGameinDB(questArr)
         firebase.getQnA()
-        questArr
 
-//        for (i in 0..questArr.size){
-//            questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
-//        }
-//        titleTextview.text = gameArray[0].MovieName
+        questArr = FirebaseDBHelper.questionArr
 
+        for (i in 0 until RoomDBHelper.chosenMovieArr.size) {
+            questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
+        }
 
+        insertGameinDB(questArr)
         getCurrentGames()
-
+        fillInView(0)
 
     }
 

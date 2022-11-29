@@ -10,8 +10,12 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseDBHelper {
 
@@ -25,7 +29,7 @@ class FirebaseDBHelper {
 //        get() {return field}
 
 
-    suspend fun getQnA(): ArrayList<QnAModel> {
+     suspend fun getQnA() = suspendCoroutine<ArrayList<QnAModel>> { continuation ->
 
        database.addListenerForSingleValueEvent(object : ValueEventListener {
            override fun onDataChange(p0: DataSnapshot) {
@@ -40,6 +44,10 @@ class FirebaseDBHelper {
                        questionArr.add(qm)
                        Log.e("ededsize", questionArr.size.toString())
                    }
+
+                   if (questionArr.size == children.count()){
+                       continuation.resume(questionArr)
+                   }
                }
            }
 
@@ -47,11 +55,10 @@ class FirebaseDBHelper {
                Log.e("FirebaseError", "loadPost:onCancelled", p0.toException())
            }
 
-           })
+       })
 
-        delay(2000L)
+//        delay(2000L)
         Log.e("ededsizes", questionArr.size.toString())
-        return questionArr
     }
 
 

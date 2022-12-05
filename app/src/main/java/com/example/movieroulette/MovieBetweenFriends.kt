@@ -39,9 +39,11 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
 
     private fun fillInView(index: Int){
-        GlobalScope.launch(Dispatchers.Main) {
-            titleTextview.text = gameArray[index].MovieName
-        }
+        titleTextview.text = questArr.size.toString()
+//        GlobalScope.launch(Dispatchers.Main) {
+////            titleTextview.text = gameArray[index].MovieName
+//            titleTextview.text = questArr.size.toString()
+//        }
     }
 
     private fun makeNewGame(){
@@ -49,11 +51,10 @@ class MovieBetweenFriends : AppCompatActivity() {
         FirebaseDBHelper.getQnA(::firstUpdateView)
     }
 
-     private fun firstUpdateView(questA: ArrayList<QnAModel>): String {
+     private fun firstUpdateView(questA: ArrayList<QnAModel>){
         questArr = questA
         if (questArr.size != 0) {
             Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
-
             for (i in 0 until RoomDBHelper.chosenMovieArr.size - 1) {
                 questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
@@ -61,11 +62,11 @@ class MovieBetweenFriends : AppCompatActivity() {
             insertGameinDB(questArr)
             getCurrentGames()
             fillInView(0)
-            return "ok"
+
         }
         else
             Log.e("fffisNull", FirebaseDBHelper.questionArr.size.toString())
-            return "error"
+
     }
 
 

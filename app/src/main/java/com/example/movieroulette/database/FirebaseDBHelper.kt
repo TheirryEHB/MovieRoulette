@@ -7,43 +7,41 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlin.math.floor
+import kotlin.reflect.KFunction1
 
 class FirebaseDBHelper {
 
     companion object {
         var questionArr = ArrayList<QnAModel>()
-        var random = Math.floor((Math.random() * RoomDBHelper.chosenMovieArr.size))
+        var random = floor((Math.random() * RoomDBHelper.chosenMovieArr.size))
         var database = Firebase.database.getReference("QNA")
 
 //    val firebaseDb = FirebaseFirestore.getInstance()
 //        get() {return field}
 
-        fun getQnA(callback: (questA: ArrayList<QnAModel>) -> String) {
+        fun getQnA(callback: (questA: ArrayList<QnAModel>) -> Unit) {
             database.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     val children = p0.children
                     val c = children.count()
-                    for (i in 1 until c - 1) {
-                        val qm = QnAModel()
-                        qm.id = children.elementAt(i).key.toString()
-                        qm.answer = children.elementAt(i).child("answer").value.toString()
-                        qm.question = children.elementAt(i).child("question").value.toString()
-                        questionArr.add(qm)
-                        Log.e("ededsize1", questionArr.size.toString())
-                    }
-//                    children.forEach {
+                    Log.d("ededsize1", c.toString())
+//                    for (i in 1 until c - 1) {
 //                        val qm = QnAModel()
-//                        qm.id = it.key.toString()
-//                        qm.answer = it.child("answer").value.toString()
-//                        qm.question = it.child("question").value.toString()
+//                        qm.id = children.elementAt(i).key.toString()
+//                        qm.answer = children.elementAt(i).child("answer").value.toString()
+//                        qm.question = children.elementAt(i).child("question").value.toString()
 //                        questionArr.add(qm)
 //                        Log.e("ededsize1", questionArr.size.toString())
 //                    }
-//                    val qq = QnAModel()
-//                    questionArr.add(qq)
-                    Log.e("ededsize", questionArr.size.toString())
+                    children.forEach {
+                        val qm = QnAModel()
+                        qm.id = it.key.toString()
+                        qm.answer = it.child("answer").value.toString()
+                        qm.question = it.child("question").value.toString()
+                        questionArr.add(qm)
+                        Log.e("ededsize1", questionArr.size.toString())
+                    }
                     callback.invoke(questionArr)
                 }
 

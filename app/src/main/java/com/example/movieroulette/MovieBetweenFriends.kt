@@ -46,13 +46,10 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     private fun makeNewGame(){
         nukeTable()
-        firebase.getQnA() {
-            result ->
-             firstUpdateView(result)
-        }
+        firebase.getQnA(::firstUpdateView)
     }
 
-     private fun firstUpdateView(questA: ArrayList<QnAModel>) {
+     private fun firstUpdateView(questA: ArrayList<QnAModel>): String {
         questArr = questA
         if (questArr.size != 0) {
             Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
@@ -64,9 +61,11 @@ class MovieBetweenFriends : AppCompatActivity() {
             insertGameinDB(questArr)
             getCurrentGames()
             fillInView(0)
+            return "ok"
         }
         else
             Log.e("fffisNull", FirebaseDBHelper.questionArr.size.toString())
+            return "error"
     }
 
 

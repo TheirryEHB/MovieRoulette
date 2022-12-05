@@ -21,23 +21,21 @@ class FirebaseDBHelper {
 //    val firebaseDb = FirebaseFirestore.getInstance()
 //        get() {return field}
 
-     fun getQnA(callback: (result: ArrayList<QnAModel>) -> Unit){
+     fun getQnA(callback: (questA: ArrayList<QnAModel>) -> String){
            database.addListenerForSingleValueEvent(object : ValueEventListener {
                override fun onDataChange(p0: DataSnapshot) {
                    val children = p0.children
                    val c = children.count()
                    children.forEach {
                        val qm = QnAModel()
-                       if (it != null) {
-                           qm.id = it.key.toString()
-                           qm.answer = it.child("answer").value.toString()
-                           qm.question = it.child("question").value.toString()
-                           questionArr.add(qm)
-                           Log.e("ededsize", questionArr.size.toString())
-                       }
-                       else
-                           callback.invoke(questionArr)
+                       qm.id = it.key.toString()
+                       qm.answer = it.child("answer").value.toString()
+                       qm.question = it.child("question").value.toString()
+                       questionArr.add(qm)
+                       Log.e("ededsize1", questionArr.size.toString())
                    }
+                   Log.e("ededsize", questionArr.size.toString())
+                   callback.invoke(questionArr)
                }
 
                override fun onCancelled(p0: DatabaseError) {

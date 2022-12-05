@@ -39,11 +39,11 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
 
     private fun fillInView(index: Int){
-        titleTextview.text = questArr.size.toString()
-//        GlobalScope.launch(Dispatchers.Main) {
-////            titleTextview.text = gameArray[index].MovieName
+//        titleTextview.text = questArr.size.toString()
+        GlobalScope.launch(Dispatchers.Main) {
+            titleTextview.text = gameArray[index].MovieName
 //            titleTextview.text = questArr.size.toString()
-//        }
+        }
     }
 
     private fun makeNewGame(){
@@ -59,9 +59,12 @@ class MovieBetweenFriends : AppCompatActivity() {
                 questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
 
-            insertGameinDB(questArr)
-            getCurrentGames()
-            fillInView(0)
+            thread {insertGameinDB(questArr)
+                        getCurrentGames()
+                fillInView(0)
+            }
+
+
 
         }
         else
@@ -70,14 +73,14 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
 
 
-    private  fun insertGameinDB(questArray: ArrayList<QnAModel>) {
+    private fun insertGameinDB(questArray: ArrayList<QnAModel>) {
         questArray.forEach {
             friendsDao.insertGame(RoomDBHelper.FriendsGame(0, it.movieName, it.id, false, false, 0))
 //                Log.d("fd", RoomDBHelper.FriendsGame(0, it.id, false, false, 0).toString())
         }
     }
     private fun nukeTable() { friendsDao.nukeTable() }
-    private  fun getCurrentGames () { gameArray = friendsDao.getAll() }
+    private fun getCurrentGames () { gameArray = friendsDao.getAll() }
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

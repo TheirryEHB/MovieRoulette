@@ -7,9 +7,7 @@ import android.widget.TextView
 import androidx.room.Room
 import com.example.movieroulette.database.FirebaseDBHelper
 import com.example.movieroulette.database.RoomDBHelper
-import com.example.movieroulette.models.FriendsGameModel
 import com.example.movieroulette.models.QnAModel
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 
@@ -36,45 +34,50 @@ class MovieBetweenFriends : AppCompatActivity() {
         ).build()
         friendsDao = db.FriendsGameDao()
 
-        thread { makeNewGame() }
-
-
+       thread { makeNewGame() }
 
     }
 
-    private suspend fun fillInView(index: Int){
+    private fun fillInView(index: Int){
         GlobalScope.launch(Dispatchers.Main) {
             titleTextview.text = gameArray[index].MovieName
         }
     }
 
-    private  fun makeNewGame() = runBlocking {
-
+    private fun makeNewGame(){
         nukeTable()
-        firebase.getQnA()
-
-        questArr = FirebaseDBHelper.questionArr
-
-        for (i in 0 until RoomDBHelper.chosenMovieArr.size) {
-            questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
+        firebase.getQnA() {
+            result ->
+             firstUpdateView(result)
         }
-
-        insertGameinDB(questArr)
-        getCurrentGames()
-        fillInView(0)
-
     }
 
-    private suspend fun insertGameinDB(questArray: ArrayList<QnAModel>) = coroutineScope {
-        launch {
-            questArray.forEach {
-                friendsDao.insertGame(RoomDBHelper.FriendsGame(0, it.movieName, it.id, false, false, 0))
-//                Log.d("fd", RoomDBHelper.FriendsGame(0, it.id, false, false, 0).toString())
+     private fun firstUpdateView(questA: ArrayList<QnAModel>) {
+        questArr = questA
+        if (questArr.size != 0) {
+            Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
+
+            for (i in 0 until RoomDBHelper.chosenMovieArr.size) {
+                questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
+
+            insertGameinDB(questArr)
+            getCurrentGames()
+            fillInView(0)
+        }
+        else
+            Log.e("fffisNull", FirebaseDBHelper.questionArr.size.toString())
+    }
+
+
+    private  fun insertGameinDB(questArray: ArrayList<QnAModel>) {
+        questArray.forEach {
+            friendsDao.insertGame(RoomDBHelper.FriendsGame(0, it.movieName, it.id, false, false, 0))
+//                Log.d("fd", RoomDBHelper.FriendsGame(0, it.id, false, false, 0).toString())
         }
     }
-    private suspend fun nukeTable() = coroutineScope{ launch{ friendsDao.nukeTable() }}
-    private suspend fun getCurrentGames () = coroutineScope { launch{ gameArray = friendsDao.getAll() }}
+    private fun nukeTable() { friendsDao.nukeTable() }
+    private  fun getCurrentGames () { gameArray = friendsDao.getAll() }
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

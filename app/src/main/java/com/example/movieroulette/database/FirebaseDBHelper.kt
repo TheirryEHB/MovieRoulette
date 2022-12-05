@@ -25,14 +25,24 @@ class FirebaseDBHelper {
                 override fun onDataChange(p0: DataSnapshot) {
                     val children = p0.children
                     val c = children.count()
-                    children.forEach {
+                    for (i in 1 until c - 1) {
                         val qm = QnAModel()
-                        qm.id = it.key.toString()
-                        qm.answer = it.child("answer").value.toString()
-                        qm.question = it.child("question").value.toString()
+                        qm.id = children.elementAt(i).key.toString()
+                        qm.answer = children.elementAt(i).child("answer").value.toString()
+                        qm.question = children.elementAt(i).child("question").value.toString()
                         questionArr.add(qm)
                         Log.e("ededsize1", questionArr.size.toString())
                     }
+//                    children.forEach {
+//                        val qm = QnAModel()
+//                        qm.id = it.key.toString()
+//                        qm.answer = it.child("answer").value.toString()
+//                        qm.question = it.child("question").value.toString()
+//                        questionArr.add(qm)
+//                        Log.e("ededsize1", questionArr.size.toString())
+//                    }
+//                    val qq = QnAModel()
+//                    questionArr.add(qq)
                     Log.e("ededsize", questionArr.size.toString())
                     callback.invoke(questionArr)
                 }

@@ -54,7 +54,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         if (questArr.size != 0) {
             Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
 
-            for (i in 0 until RoomDBHelper.chosenMovieArr.size) {
+            for (i in 0 until RoomDBHelper.chosenMovieArr.size - 1) {
                 questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
 

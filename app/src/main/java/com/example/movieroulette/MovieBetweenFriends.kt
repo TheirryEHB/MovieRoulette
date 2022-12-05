@@ -46,7 +46,7 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     private fun makeNewGame(){
         nukeTable()
-        firebase.getQnA(::firstUpdateView)
+        FirebaseDBHelper.getQnA(::firstUpdateView)
     }
 
      private fun firstUpdateView(questA: ArrayList<QnAModel>): String {

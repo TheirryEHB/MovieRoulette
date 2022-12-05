@@ -33,7 +33,7 @@ class FirebaseDBHelper {
 //                        qm.question = children.elementAt(i).child("question").value.toString()
 //                        questionArr.add(qm)
 //                        Log.e("ededsize1", questionArr.size.toString())
-//                    }
+//                    }////
                     children.forEach {
                         val qm = QnAModel()
                         qm.id = it.key.toString()

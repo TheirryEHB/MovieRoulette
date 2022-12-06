@@ -2,6 +2,7 @@ package com.example.movieroulette.database
 
 import android.util.Log
 import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 import com.example.movieroulette.models.MovieModel
 import org.json.JSONException
 import org.json.JSONObject
@@ -27,7 +28,7 @@ class RoomDBHelper {
 
     @Entity(tableName = "FriendsGame")
     data class FriendsGame(
-        @PrimaryKey(autoGenerate = true) val uid: Int?,
+        @PrimaryKey val Uuid: String,
         @ColumnInfo(name = "movie_name") val MovieName: String?,
         @ColumnInfo(name = "quest_id") val QuestId: String?,
         @ColumnInfo(name = "did_ans") val DidAns: Boolean?,
@@ -39,14 +40,14 @@ class RoomDBHelper {
         @Query("SELECT * FROM FriendsGame")
         fun getAll(): List<FriendsGame>
 
-        @Query("SELECT uid FROM FriendsGame WHERE did_ans = :ans")
+        @Query("SELECT Uuid FROM FriendsGame WHERE did_ans = :ans")
         fun findByAnswer(ans: String):FriendsGame
 
-        @Query("SELECT uid FROM FriendsGame WHERE is_right = :right")
+        @Query("SELECT Uuid FROM FriendsGame WHERE is_right = :right")
         fun findByRight(right: String):FriendsGame
 
-        @Query("SELECT answer_time FROM friendsgame WHERE uid IN (:gameIds)")
-        fun loadAllByIds(gameIds: IntArray): List<FriendsGame>
+        @Query("SELECT answer_time, Uuid FROM friendsgame WHERE Uuid IN (:gameIds)")
+        fun loadAllByIds(gameIds: Array<String>): List<FriendsGame>
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertGame(fi: FriendsGame)
@@ -78,29 +79,21 @@ class RoomDBHelper {
 
         @Query("SELECT movie_id FROM ChosenMovie WHERE game_id = :gameid")
         fun findByQid(gameid: Int):ChosenMovie
-
-
     }
 
-    @Database(entities = [FriendsGame::class, LoversGame::class, ChosenMovie::class], version = 1)
+
+    @Database(entities = [FriendsGame::class, LoversGame::class, ChosenMovie::class], version = 2)
+    //autoMigrations = [ AutoMigration (from = 1, to = 2,spec = AppDatabase.MyAutoMigration::class)]
+
     abstract class AppDatabase : RoomDatabase() {
+
+        @DeleteTable(tableName = "FriendsGame")
+        class MyAutoMigration : AutoMigrationSpec
+
         abstract fun FriendsGameDao() : FriendsGameDao
         abstract fun ChosenMovieDao() : ChosenMovieDao
 
-//        companion object{
-//            private var friendsDBInstance: AppDatabase? = null
-//            fun getDatabase(context: Context): AppDatabase {
-//                return friendsDBInstance ?: synchronized(this){
-//                    val instance = Room.databaseBuilder(
-//                        context.applicationContext,
-//                        AppDatabase::class.java,
-//                        "friends_game_database"
-//                    ).build()
-//                    friendsDBInstance = instance
-//                    instance
-//                }
-//            }
-//        }
+
 
     }
 

@@ -7,8 +7,11 @@ import android.widget.TextView
 import androidx.room.Room
 import com.example.movieroulette.database.FirebaseDBHelper
 import com.example.movieroulette.database.RoomDBHelper
+import com.example.movieroulette.models.FriendsGameModel
 import com.example.movieroulette.models.QnAModel
 import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 class MovieBetweenFriends : AppCompatActivity() {
@@ -31,7 +34,9 @@ class MovieBetweenFriends : AppCompatActivity() {
         db = Room.databaseBuilder(
             applicationContext,
             RoomDBHelper.AppDatabase::class.java, "DB1"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
         friendsDao = db.FriendsGameDao()
 
        thread { makeNewGame() }
@@ -39,10 +44,9 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
 
     private fun fillInView(index: Int){
-//        titleTextview.text = questArr.size.toString()
         GlobalScope.launch(Dispatchers.Main) {
             titleTextview.text = gameArray[index].MovieName
-//            titleTextview.text = questArr.size.toString()
+//            titleTextview.text = gameArray.size.toString()
         }
     }
 
@@ -54,17 +58,18 @@ class MovieBetweenFriends : AppCompatActivity() {
      private fun firstUpdateView(questA: ArrayList<QnAModel>){
         questArr = questA
         if (questArr.size != 0) {
-            Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
+//            Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
             for (i in 0 until RoomDBHelper.chosenMovieArr.size - 1) {
                 questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
 
-            thread {insertGameinDB(questArr)
-                        getCurrentGames()
-                fillInView(0)
+            thread {
+                runBlocking {
+                    insertGameinDB(questArr)
+                    getCurrentGames()
+                    fillInView(0)
+                }
             }
-
-
 
         }
         else
@@ -75,12 +80,15 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     private fun insertGameinDB(questArray: ArrayList<QnAModel>) {
         questArray.forEach {
-            friendsDao.insertGame(RoomDBHelper.FriendsGame(0, it.movieName, it.id, false, false, 0))
-//                Log.d("fd", RoomDBHelper.FriendsGame(0, it.id, false, false, 0).toString())
+            val uuid = UUID.randomUUID().toString()
+            Log.d("fddd", uuid)
+            friendsDao.insertGame(RoomDBHelper.FriendsGame(uuid, it.movieName, it.id, false, false, 0))
+
         }
     }
     private fun nukeTable() { friendsDao.nukeTable() }
-    private fun getCurrentGames () { gameArray = friendsDao.getAll() }
+    private fun getCurrentGames () { gameArray = friendsDao.getAll()
+    Log.d("gamearr", gameArray.toString())}
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

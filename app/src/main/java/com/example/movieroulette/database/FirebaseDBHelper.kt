@@ -30,7 +30,7 @@ class FirebaseDBHelper {
                         qm.answer = it.child("answer").value.toString()
                         qm.question = it.child("question").value.toString()
                         questionArr.add(qm)
-                        Log.e("ededsize2", questionArr.size.toString())
+//                        Log.e("ededsize2", questionArr.size.toString())
                     }
                     callback.invoke(questionArr)
                 }

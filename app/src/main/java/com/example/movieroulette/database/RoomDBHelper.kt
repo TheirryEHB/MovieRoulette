@@ -31,6 +31,8 @@ class RoomDBHelper {
         @PrimaryKey val Uuid: String,
         @ColumnInfo(name = "movie_name") val MovieName: String?,
         @ColumnInfo(name = "quest_id") val QuestId: String?,
+        @ColumnInfo(name = "question") val Question: String?,
+        @ColumnInfo(name = "answer") val Answer: String?,
         @ColumnInfo(name = "did_ans") val DidAns: Boolean?,
         @ColumnInfo(name = "is_right") val isRight: Boolean?,
         @ColumnInfo(name = "answer_time") val AnswerTime: Int?
@@ -42,6 +44,12 @@ class RoomDBHelper {
 
         @Query("SELECT Uuid FROM FriendsGame WHERE did_ans = :ans")
         fun findByAnswer(ans: String):FriendsGame
+
+        @Query("SELECT Question FROM FriendsGame WHERE Uuid = (:uuid)")
+        fun getQuestion(uuid: String):FriendsGame
+
+        @Query("SELECT Answer FROM FriendsGame WHERE Uuid = (:uuid)")
+        fun getAnswer(uuid: String):FriendsGame
 
         @Query("SELECT Uuid FROM FriendsGame WHERE is_right = :right")
         fun findByRight(right: String):FriendsGame

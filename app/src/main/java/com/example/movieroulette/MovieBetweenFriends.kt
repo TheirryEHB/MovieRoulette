@@ -13,6 +13,7 @@ import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
+import kotlin.math.floor
 
 class MovieBetweenFriends : AppCompatActivity() {
 
@@ -23,6 +24,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     private var gameArray: List<RoomDBHelper.FriendsGame> = ArrayList()
 
     private lateinit var titleTextview: TextView
+    private lateinit var questionTextview: TextView
     var questArr: ArrayList<QnAModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         setContentView(R.layout.activity_movie_between_friends)
 
         titleTextview = findViewById(R.id.title_text_view)
+        questionTextview = findViewById(R.id.question_text_view)
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -46,7 +49,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     private fun fillInView(index: Int){
         GlobalScope.launch(Dispatchers.Main) {
             titleTextview.text = gameArray[index].MovieName
-//            titleTextview.text = gameArray.size.toString()
+            questionTextview.text = gameArray[index].Question
         }
     }
 
@@ -56,11 +59,15 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
 
      private fun firstUpdateView(questA: ArrayList<QnAModel>){
-        questArr = questA
+         questArr = questA
+         val newQuestionArr: ArrayList<QnAModel> = ArrayList()
         if (questArr.size != 0) {
-//            Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
+    //            Log.e("fff", FirebaseDBHelper.questionArr.size.toString())
             for (i in 0 until RoomDBHelper.chosenMovieArr.size - 1) {
-                questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
+                val random = floor((Math.random() * RoomDBHelper.chosenMovieArr.size))
+                newQuestionArr[i] = questArr[random.toInt()]
+                //TODO maybe a better way is to randomize the whole array at the beginning of this method. That way questArr can be used.
+                newQuestionArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
 
             thread {
@@ -76,19 +83,15 @@ class MovieBetweenFriends : AppCompatActivity() {
             Log.e("fffisNull", FirebaseDBHelper.questionArr.size.toString())
 
     }
-
-
     private fun insertGameinDB(questArray: ArrayList<QnAModel>) {
         questArray.forEach {
             val uuid = UUID.randomUUID().toString()
             Log.d("fddd", uuid)
-            friendsDao.insertGame(RoomDBHelper.FriendsGame(uuid, it.movieName, it.id, false, false, 0))
-
+            friendsDao.insertGame(RoomDBHelper.FriendsGame(uuid, it.movieName, it.id, it.question, it.answer, false, false, 0))
         }
     }
     private fun nukeTable() { friendsDao.nukeTable() }
-    private fun getCurrentGames () { gameArray = friendsDao.getAll()
-    Log.d("gamearr", gameArray.toString())}
+    private fun getCurrentGames () { gameArray = friendsDao.getAll() }
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

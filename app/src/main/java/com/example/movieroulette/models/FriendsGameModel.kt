@@ -5,6 +5,8 @@ class FriendsGameModel(movieName: String, question: String, b: Boolean, b1: Bool
 //    var uid : String = ""
     var movieName : String = ""
     var questId : String = ""
+    var queston: String = ""
+    var answer: String = ""
     var didAns : Boolean = false
     var isRight : Boolean = false
     var ansTime : Int = 0

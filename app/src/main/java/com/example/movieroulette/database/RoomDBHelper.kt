@@ -33,9 +33,9 @@ class RoomDBHelper {
         @ColumnInfo(name = "quest_id") val QuestId: String?,
         @ColumnInfo(name = "question") val Question: String?,
         @ColumnInfo(name = "answer") val Answer: String?,
-        @ColumnInfo(name = "did_ans") val DidAns: Boolean?,
-        @ColumnInfo(name = "is_right") val isRight: Boolean?,
-        @ColumnInfo(name = "answer_time") val AnswerTime: Int?
+        @ColumnInfo(name = "did_ans") var DidAns: Boolean?,
+        @ColumnInfo(name = "is_right") var isRight: Boolean?,
+        @ColumnInfo(name = "answer_time") var AnswerTime: Int?
     )
     @Dao
     interface FriendsGameDao{
@@ -45,10 +45,10 @@ class RoomDBHelper {
         @Query("SELECT Uuid FROM FriendsGame WHERE did_ans = :ans")
         fun findByAnswer(ans: String):FriendsGame
 
-        @Query("SELECT Question FROM FriendsGame WHERE Uuid = (:uuid)")
+        @Query("SELECT Question, Uuid FROM FriendsGame WHERE Uuid = (:uuid)")
         fun getQuestion(uuid: String):FriendsGame
 
-        @Query("SELECT Answer FROM FriendsGame WHERE Uuid = (:uuid)")
+        @Query("SELECT Answer, Uuid FROM FriendsGame WHERE Uuid = (:uuid)")
         fun getAnswer(uuid: String):FriendsGame
 
         @Query("SELECT Uuid FROM FriendsGame WHERE is_right = :right")
@@ -59,6 +59,9 @@ class RoomDBHelper {
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertGame(fi: FriendsGame)
+
+        /*@Update(entity = FriendsGame::class)
+        fun */
 
         @Query("DELETE FROM FriendsGame")
         fun nukeTable()

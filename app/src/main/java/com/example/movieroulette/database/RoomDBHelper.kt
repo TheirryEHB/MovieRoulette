@@ -51,11 +51,12 @@ class RoomDBHelper {
         @Query("SELECT Answer, Uuid FROM FriendsGame WHERE Uuid = (:uuid)")
         fun getAnswer(uuid: String):FriendsGame
 
-        @Query("SELECT Uuid FROM FriendsGame WHERE is_right = :right")
-        fun findByRight(right: String):FriendsGame
+        @Query("SELECT * FROM FriendsGame WHERE is_right = :right")
+        fun findByRight(right: String): List<FriendsGame>
 
         @Query("SELECT answer_time, Uuid FROM friendsgame WHERE Uuid IN (:gameIds)")
         fun loadAllByIds(gameIds: Array<String>): List<FriendsGame>
+
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertGame(fi: FriendsGame)

@@ -14,7 +14,6 @@ import org.json.JSONObject
 class CustomAdapter(private val dataSet: ArrayList<JSONObject>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
-    val room = RoomDBHelper()
     var chosenMovies = RoomDBHelper.chosenMovieArr
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         var headElement: ConstraintLayout
@@ -49,7 +48,6 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
         holder.releaseView.text = itemsData.getString("release_date")
 
         holder.headElement.setOnClickListener {
-//            Log.d("here", holder.titleView.text.toString())
             val movie = MovieModel()
             movie.id = itemsData.getString("id")
             movie.lang = itemsData.getString("original_language")

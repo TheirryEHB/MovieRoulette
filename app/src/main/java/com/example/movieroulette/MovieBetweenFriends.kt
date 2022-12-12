@@ -1,5 +1,6 @@
 package com.example.movieroulette
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import androidx.room.Room
 import com.example.movieroulette.database.FirebaseDBHelper
 import com.example.movieroulette.database.RoomDBHelper
 import com.example.movieroulette.models.FriendsGameModel
+import com.example.movieroulette.models.MovieModel
 import com.example.movieroulette.models.QnAModel
 import kotlinx.coroutines.*
 import java.util.*
@@ -30,6 +32,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     private lateinit var questionTextview: TextView
     var questArr: ArrayList<QnAModel> = ArrayList()
 
+    //TODO make timer that restarts with every game
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_between_friends)
@@ -38,9 +41,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         questionTextview = findViewById(R.id.question_text_view)
         val yesButton = findViewById<Button>(R.id.yes_button)
         val noButton = findViewById<Button>(R.id.no_button)
-        yesButton.setOnClickListener {
-            checkAnswer("true")
-        }
+        yesButton.setOnClickListener { checkAnswer("true") }
         noButton.setOnClickListener { checkAnswer("false") }
 
         db = Room.databaseBuilder(
@@ -70,19 +71,44 @@ class MovieBetweenFriends : AppCompatActivity() {
         }
     }
     private fun updateGame(){
-        if(gameIndex == gameArray.size){
+        if(gameIndex == gameArray.size+1){ //Last question has been answered
             thread {
                 friendsDao.insertGame(currentGame)
+                decideWinner()
             }
         }
         else {
-            thread {
+            thread { //Show next question
                 friendsDao.insertGame(currentGame)
                 ++gameIndex
                 fillInView()
             }
         }
 
+    }
+    private fun decideWinner(){
+        thread{
+            runBlocking {
+                getIsRightGames()
+                //TODO get game with least time
+                winnerIntent()
+            }
+        }
+
+    }
+    private fun winnerIntent(){
+        val intent = Intent(this, WinnerActivity::class.java)
+        var themov = MovieModel()
+        RoomDBHelper.chosenMovieArr.forEach {
+         if(it.name == currentGame.MovieName)
+             themov = it
+        }
+        intent.putExtra("id", themov.id)
+        intent.putExtra("name", themov.name)
+        intent.putExtra("rating", themov.rating)
+        intent.putExtra("release", themov.release)
+        intent.putExtra("lang", themov.lang)
+        startActivity(intent)
     }
 
     private fun fillInView(){
@@ -103,7 +129,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         if (questArr.size != 0) {
             questArr.shuffle()
             questArr = questArr.take(RoomDBHelper.chosenMovieArr.size).toCollection(ArrayList())
-            for (i in 0 until RoomDBHelper.chosenMovieArr.size - 1) {
+            for (i in 0 until RoomDBHelper.chosenMovieArr.size) {
                 questArr[i].movieName = RoomDBHelper.chosenMovieArr[i].name
             }
             thread {
@@ -121,12 +147,13 @@ class MovieBetweenFriends : AppCompatActivity() {
     private fun insertGamesinDB(questArray: ArrayList<QnAModel>) {
         questArray.forEach {
             val uuid = UUID.randomUUID().toString()
-            Log.d("fddd", uuid)
+            Log.d("fddd", it.movieName)
             friendsDao.insertGame(RoomDBHelper.FriendsGame(uuid, it.movieName, it.id, it.question, it.answer, false, false, 0))
         }
     }
     private fun nukeTable() { friendsDao.nukeTable() }
-    private fun getCurrentGames () { gameArray = friendsDao.getAll() }
+    private fun getCurrentGames() { gameArray = friendsDao.getAll() }
+    private fun getIsRightGames(){gameArray = friendsDao.findByRight("true")}
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

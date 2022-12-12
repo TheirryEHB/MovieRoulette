@@ -3,4 +3,5 @@
     <string name="question_for">Question for:</string>
     <string name="ansNo">Nooo?</string>
     <string name="ansYes">Yes!</string>
+    <string name="winner">And the winner, the winner is...</string>
 </resources>

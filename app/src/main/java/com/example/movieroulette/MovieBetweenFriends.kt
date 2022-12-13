@@ -1,11 +1,16 @@
 package com.example.movieroulette
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.example.movieroulette.database.FirebaseDBHelper
 import com.example.movieroulette.database.RoomDBHelper
@@ -32,13 +37,21 @@ class MovieBetweenFriends : AppCompatActivity() {
     private lateinit var questionTextview: TextView
     var questArr: ArrayList<QnAModel> = ArrayList()
 
+    //timer
+    private lateinit var timer: CountDownTimer
+    private lateinit var view_timer: Chronometer
+
     //TODO make timer that restarts with every game
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_between_friends)
 
         titleTextview = findViewById(R.id.title_text_view)
         questionTextview = findViewById(R.id.question_text_view)
+        view_timer = findViewById(R.id.view_timer)
+
+
         val yesButton = findViewById<Button>(R.id.yes_button)
         val noButton = findViewById<Button>(R.id.no_button)
         yesButton.setOnClickListener { checkAnswer("true") }
@@ -54,6 +67,19 @@ class MovieBetweenFriends : AppCompatActivity() {
 
        thread { makeNewGame() }
 
+        view_timer.isCountDown = true
+        view_timer.base = SystemClock.elapsedRealtime() + 10000
+
+//        timer = object: CountDownTimer(10000, 1000){
+//            override fun onTick(p0: Long) {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onFinish() {
+//                TODO("Not yet implemented")
+//            }
+//
+//        }
     }
 
     private fun checkAnswer(ans: String){
@@ -116,6 +142,7 @@ class MovieBetweenFriends : AppCompatActivity() {
             currentGame = gameArray[gameIndex]
             titleTextview.text = gameArray[gameIndex].MovieName
             questionTextview.text = gameArray[gameIndex].Question
+            view_timer.start()
         }
     }
 

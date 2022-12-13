@@ -12,5 +12,11 @@ class WinnerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_winner)
 
         winnertext = findViewById(R.id.winner_textview)
+
+        val bundle : Bundle? = intent.extras
+        val id = bundle!!.getString("id")
+        val moviename = bundle.getString("name")
+
+        winnertext.text = moviename
     }
 }

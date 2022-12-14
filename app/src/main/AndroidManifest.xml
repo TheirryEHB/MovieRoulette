@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MovieRoulette">
+        android:theme="@style/Theme.MovieRoulette"
+        >
         <activity
             android:name=".WinnerActivity"
             android:exported="false">

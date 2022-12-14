@@ -32,6 +32,8 @@ class MovieBetweenFriends : AppCompatActivity() {
     private var gameArray: List<RoomDBHelper.FriendsGame> = ArrayList()
     private lateinit var currentGame: RoomDBHelper.FriendsGame
     private var gameIndex: Int = 0
+    private var elapsedTime: Int = 0
+    private val maxTime: Int = 10
 
     private lateinit var titleTextview: TextView
     private lateinit var questionTextview: TextView
@@ -41,7 +43,8 @@ class MovieBetweenFriends : AppCompatActivity() {
     private lateinit var timer: CountDownTimer
     private lateinit var view_timer: Chronometer
 
-    //TODO make timer that restarts with every game
+    //TODO zien of getisright goed werkt
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +57,18 @@ class MovieBetweenFriends : AppCompatActivity() {
 
         val yesButton = findViewById<Button>(R.id.yes_button)
         val noButton = findViewById<Button>(R.id.no_button)
-        yesButton.setOnClickListener { checkAnswer("true") }
-        noButton.setOnClickListener { checkAnswer("false") }
+        yesButton.setOnClickListener {
+            view_timer.stop()
+            if (elapsedTime > maxTime)
+                elapsedTime = maxTime
+            checkAnswer("true")
+        }
+        noButton.setOnClickListener {
+            view_timer.stop()
+            if (elapsedTime > maxTime)
+                elapsedTime = maxTime
+            checkAnswer("false")
+        }
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -69,6 +82,12 @@ class MovieBetweenFriends : AppCompatActivity() {
 
         view_timer.isCountDown = true
         view_timer.base = SystemClock.elapsedRealtime() + 10000
+        view_timer.setOnChronometerTickListener {
+            ++elapsedTime
+            if(view_timer.base == SystemClock.elapsedRealtime()){
+                checkAnswer("none")
+            }
+        }
 
 //        timer = object: CountDownTimer(10000, 1000){
 //            override fun onTick(p0: Long) {
@@ -86,18 +105,21 @@ class MovieBetweenFriends : AppCompatActivity() {
         if (ans == currentGame.Answer){
             currentGame.DidAns = true
             currentGame.isRight = true
-            currentGame.AnswerTime = 0
+            currentGame.AnswerTime = elapsedTime
             updateGame()
         }
         else{
             currentGame.DidAns = true
             currentGame.isRight = false
-            currentGame.AnswerTime = 0
+            currentGame.AnswerTime = elapsedTime
             updateGame()
         }
+        elapsedTime = 0
+        view_timer.base = SystemClock.elapsedRealtime() + 10000
+        view_timer.start()
     }
     private fun updateGame(){
-        if(gameIndex == gameArray.size+1){ //Last question has been answered
+        if(gameIndex == gameArray.size - 1){ //Last question has been answered
             thread {
                 friendsDao.insertGame(currentGame)
                 decideWinner()
@@ -116,6 +138,13 @@ class MovieBetweenFriends : AppCompatActivity() {
         thread{
             runBlocking {
                 getIsRightGames()
+                var isLeast: Int = maxTime
+                gameArray.forEach{
+                    if (it.AnswerTime!! <= isLeast) {
+                        currentGame = it
+                        isLeast = currentGame.AnswerTime!!
+                    }
+                }
                 //TODO get game with least time
                 winnerIntent()
             }
@@ -151,7 +180,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         FirebaseDBHelper.getQnA(::firstUpdateView)
     }
 
-     private fun firstUpdateView(questA: ArrayList<QnAModel>){
+    private fun firstUpdateView(questA: ArrayList<QnAModel>){
          questArr = questA
         if (questArr.size != 0) {
             questArr.shuffle()
@@ -184,6 +213,9 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()
-        finish()
+//        finish()
+        nukeTable()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }

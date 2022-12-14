@@ -1,8 +1,10 @@
 package com.example.movieroulette
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.example.movieroulette.database.RoomDBHelper
 
 class WinnerActivity : AppCompatActivity() {
 
@@ -18,5 +20,12 @@ class WinnerActivity : AppCompatActivity() {
         val moviename = bundle.getString("name")
 
         winnertext.text = moviename
+    }
+
+    override fun onBackPressed() {
+        RoomDBHelper.chosenMovieArr.clear()
+//        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }

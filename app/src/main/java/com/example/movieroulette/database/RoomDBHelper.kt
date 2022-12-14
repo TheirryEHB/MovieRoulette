@@ -21,7 +21,6 @@ class RoomDBHelper {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-            Log.e("jsob", jsonObject.toString())
             return jsonObject
         }
     }
@@ -58,11 +57,11 @@ class RoomDBHelper {
         fun loadAllByIds(gameIds: Array<String>): List<FriendsGame>
 
 
-        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        @Insert
         fun insertGame(fi: FriendsGame)
 
-        /*@Update(entity = FriendsGame::class)
-        fun */
+        @Query("UPDATE FriendsGame SET did_ans=:didAns, is_right=:isRight, answer_time=:ansTime WHERE Uuid=(:uuid)")
+        fun update(didAns: String, isRight:String, ansTime:String, uuid: String)
 
         @Query("DELETE FROM FriendsGame")
         fun nukeTable()

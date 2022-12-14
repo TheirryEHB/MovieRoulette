@@ -88,17 +88,6 @@ class MovieBetweenFriends : AppCompatActivity() {
                 checkAnswer("none")
             }
         }
-
-//        timer = object: CountDownTimer(10000, 1000){
-//            override fun onTick(p0: Long) {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onFinish() {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }
     }
 
     private fun checkAnswer(ans: String){
@@ -121,13 +110,13 @@ class MovieBetweenFriends : AppCompatActivity() {
     private fun updateGame(){
         if(gameIndex == gameArray.size - 1){ //Last question has been answered
             thread {
-                friendsDao.insertGame(currentGame)
+                friendsDao.update(currentGame.DidAns.toString(), currentGame.isRight.toString(), currentGame.AnswerTime.toString(), currentGame.Uuid)
                 decideWinner()
             }
         }
         else {
             thread { //Show next question
-                friendsDao.insertGame(currentGame)
+                friendsDao.update(currentGame.DidAns.toString(), currentGame.isRight.toString(), currentGame.AnswerTime.toString(), currentGame.Uuid)
                 ++gameIndex
                 fillInView()
             }
@@ -145,7 +134,6 @@ class MovieBetweenFriends : AppCompatActivity() {
                         isLeast = currentGame.AnswerTime!!
                     }
                 }
-                //TODO get game with least time
                 winnerIntent()
             }
         }
@@ -209,7 +197,7 @@ class MovieBetweenFriends : AppCompatActivity() {
     }
     private fun nukeTable() { friendsDao.nukeTable() }
     private fun getCurrentGames() { gameArray = friendsDao.getAll() }
-    private fun getIsRightGames(){gameArray = friendsDao.findByRight("true")}
+    private fun getIsRightGames(){ gameArray = friendsDao.findByRight("true") }
 
     override fun onBackPressed() {
         RoomDBHelper.chosenMovieArr.clear()

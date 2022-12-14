@@ -87,7 +87,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Chose a title first", Toast.LENGTH_SHORT).show()
             else {
                 runBlocking {
-                    Log.e("urls", getMovieSearch(searchEditText.text.toString()))
                     getData(getMovieSearch(searchEditText.text.toString()))
                     adapter.notifyDataSetChanged()
                 }

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     //Minimale ondersteuning van hdpi, xhdpi, xxhdpi en xxxhdpi schermen --> toch gewoon gelijk aan sp, dp en vector images te gebruiken?
     //TODO Gebruik van JUnit-framework voor het schrijven van testen voor je applicatie (minimum 1)
     //TODO Correcte toepassing van de navigation design patterns binnen Android
-    //TODO Ondersteuning voor minstens Engels en een andere taal naar keuze.
+    //Ondersteuning voor minstens Engels en een andere taal naar keuze.
 
     private val data = ArrayList<JSONObject>()
     private lateinit var searchBar:LinearLayout

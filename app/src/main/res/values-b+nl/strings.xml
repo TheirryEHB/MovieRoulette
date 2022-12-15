@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MovieRoulette</string>
+    <string name="question_for">Vraag voor:</string>
+    <string name="ansNo">Neeeen?</string>
+    <string name="ansYes">Ja!</string>
+    <string name="winner">En de winaar isss…</string>
+    <string name="search">Zoeken</string>
+    <string name="play">Spelen</string>
+</resources>

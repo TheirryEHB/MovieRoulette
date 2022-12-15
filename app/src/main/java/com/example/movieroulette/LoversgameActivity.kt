@@ -11,7 +11,7 @@ class LoversgameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_loversgame)
 
         val randomNumber = (0..1).random()
-        val winningMovie = RoomDBHelper.chosenMovieArr.get(randomNumber)
+        val winningMovie = RoomDBHelper.chosenMovieArr[randomNumber]
 
         val titleText = findViewById<TextView>(R.id.textTitle)
         titleText.text = winningMovie.name

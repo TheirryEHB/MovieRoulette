@@ -1,6 +1,5 @@
 package com.example.movieroulette
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,19 +11,14 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.movieroulette.database.RoomDBHelper
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
-import com.google.firebase.firestore.FirebaseFirestore
-import org.jetbrains.anko.find
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private val data = ArrayList<JSONObject>()
     private lateinit var searchBar:LinearLayout
+    private val room = RoomDBHelper()
 
-    val room = RoomDBHelper()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,20 +49,20 @@ class MainActivity : AppCompatActivity() {
 //        params.topToTop = parentView.id
 //        recyclerView.requestLayout()
 
-        //RoomDb
+        /*RoomDb*/
         room.db = Room.databaseBuilder(
                 applicationContext,
                 RoomDBHelper.AppDatabase::class.java, "DB1"
         ).build()
 
-        //Make top week movies url
+        /*Make top week movies url*/
         val topWeekUrl = getTrendingMoviesOfWeek()
-        //Make recyclerView
+        /*Make recyclerView*/
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        //Get data and fill recyclerView
+        /*Get data and fill recyclerView*/
         runBlocking { getData(topWeekUrl) }
         recyclerView.adapter = adapter
-        //New game button
+        /*New game button*/
         newGameButton.setOnClickListener {
             if (RoomDBHelper.chosenMovieArr.size < 2 )
                 Toast.makeText(this,
@@ -79,9 +73,8 @@ class MainActivity : AppCompatActivity() {
                 else if (RoomDBHelper.chosenMovieArr.size > 2)
                     startFriendsGame()
             }
-
         }
-        //Search button
+        /*Search button*/
         searchButton.setOnClickListener {
             if(searchEditText.text.toString() == "")
                 Toast.makeText(this, "Chose a title first", Toast.LENGTH_SHORT).show()
@@ -95,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     suspend fun getData(topWeekUrl: String) = coroutineScope{
-        //{"adult":false,"backdrop_path":"\/yYrvN5WFeGYjJnRzhY0QXuo4Isw.jpg","id":505642,"title":"Black Panther: Wakanda Forever","original_language":"en","original_title":"Black Panther: Wakanda Forever","overview":"Queen Ramonda, Shuri, M’Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T’Challa’s death. As the Wakandans strive to embrace their next chapter, the heroes must band together with the help of War Dog Nakia and Everett Ross and forge a new path for the kingdom of Wakanda.","poster_path":"\/sv1xJUazXeYqALzczSZ3O6nkH75.jpg","media_type":"movie","genre_ids":[28,12,878],"popularity":4392.866,"release_date":"2022-11-09","video":false,"vote_average":7.6,"vote_count":630}
+     //   {"adult":false,"backdrop_path":"\/yYrvN5WFeGYjJnRzhY0QXuo4Isw.jpg","id":505642,"title":"Black Panther: Wakanda Forever","original_language":"en","original_title":"Black Panther: Wakanda Forever","overview":"Queen Ramonda, Shuri, M’Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T’Challa’s death. As the Wakandans strive to embrace their next chapter, the heroes must band together with the help of War Dog Nakia and Everett Ross and forge a new path for the kingdom of Wakanda.","poster_path":"\/sv1xJUazXeYqALzczSZ3O6nkH75.jpg","media_type":"movie","genre_ids":[28,12,878],"popularity":4392.866,"release_date":"2022-11-09","video":false,"vote_average":7.6,"vote_count":630}
         val res = GetRequest().main(topWeekUrl)
         if (res.substring(0, 4) == "Some") {
             Log.d("urlError", res)
@@ -107,12 +100,11 @@ class MainActivity : AppCompatActivity() {
                 for (i in 0 until movieRes.length()) {
                     data.add(movieRes.getJSONObject(i))
                 }
-            }
-            else{}
+            } else{}
             }
     }
 
-    val adapter = CustomAdapter(data)
+    private val adapter = CustomAdapter(data)
 
     fun getAPIKey(): String {
         return "api_key=8ff2d545fa19ee5ef1d52be200306079"
@@ -138,16 +130,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun startLoversGame(){
+    private fun startLoversGame(){
         val intent = Intent(this, LoversgameActivity::class.java)
         startActivity(intent)
     }
-    fun startFriendsGame(){
+    private fun startFriendsGame(){
         val intent = Intent(this, MovieBetweenFriends::class.java)
         startActivity(intent)
     }
 
-    //Navigatie
+    /*Navigatie*/
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.custom_menu, menu)
         return true
@@ -156,11 +148,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.Search -> {
-//                Toast.makeText(this, "you", Toast.LENGTH_SHORT).show()
                 searchBar.visibility = View.VISIBLE
                 return true
             }
-
             else -> {
                 super.onOptionsItemSelected(item)
             }

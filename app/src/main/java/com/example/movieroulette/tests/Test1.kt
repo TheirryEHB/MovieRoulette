@@ -1,12 +1,9 @@
 package com.example.movieroulette.tests
 
 import com.example.movieroulette.GetRequest
-import com.example.movieroulette.MainActivity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking
-import org.json.JSONException
-import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 

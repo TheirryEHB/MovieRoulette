@@ -40,7 +40,6 @@ class MovieBetweenFriends : AppCompatActivity() {
     var questArr: ArrayList<QnAModel> = ArrayList()
 
     //timer
-    private lateinit var timer: CountDownTimer
     private lateinit var view_timer: Chronometer
 
     //TODO zien of getisright goed werkt

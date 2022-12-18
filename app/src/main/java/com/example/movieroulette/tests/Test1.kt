@@ -1,41 +1,35 @@
 package com.example.movieroulette.tests
 
+import com.example.movieroulette.GetRequest
 import com.example.movieroulette.MainActivity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 
+
 class Test1 {
 
-        lateinit var mainActivitySpy: MainActivity
+        lateinit var getRequest: GetRequest
 
         @Before
         fun setUp() {
+            getRequest = GetRequest()
         }
 
         @Test
-        fun jsonObjectParseTest() {
-
-            val stringBuilder: StringBuilder =
-                java.lang.StringBuilder("{\"adult\":false,\"backdrop_path\":\"\\/yYrvN5WFeGYjJnRzhY0QXuo4Isw.jpg\",\"id\":505642,\"title\":\"Black Panther: Wakanda Forever\",\"original_language\":\"en\",\"original_title\":\"Black Panther: Wakanda Forever\",\"overview\":\"Queen Ramonda, Shuri, M’Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T’Challa’s death. As the Wakandans strive to embrace their next chapter, the heroes must band together with the help of War Dog Nakia and Everett Ross and forge a new path for the kingdom of Wakanda.\",\"poster_path\":\"\\/sv1xJUazXeYqALzczSZ3O6nkH75.jpg\",\"media_type\":\"movie\",\"genre_ids\":[28,12,878],\"popularity\":4392.866,\"release_date\":\"2022-11-09\",\"video\":false,\"vote_average\":7.6,\"vote_count\":630}")
-            val ob = parse(stringBuilder.toString())
-            assertTrue(ob != null)
-            if (ob != null) {
-                assertEquals(ob.getString("adult"), false)
-            }
+        fun getRequestTest() {
+                runBlocking{
+                        val url = "https://api.themoviedb.org/3/search/movie?api_key=8ff2d545fa19ee5ef1d52be200306079&language=en-US&query=enders&page=1&include_adult=false"
+                        val response = getRequest.main(url)
+                        val respString = "{\"page\":1,\"results\":[{\"adult\":false,\"backdrop_path\":\"/qGqlWb5izTPtFngBWdbJAEmninR.jpg\",\"genre_ids\":[878,28,12],\"id\":80274,\"original_language\":\"en\",\"original_title\":\"Ender's Game\",\"overview\":\"Based on the classic novel by Orson Scott Card, Ender's Game is the story of the Earth's most gifted children training to defend their homeplanet in the space wars of the future.\",\"popularity\":27.064,\"poster_path\":\"/hEioY3LlqBwvIpZeZuR1BMaAgv1.jpg\",\"release_date\":\"2013-10-24\",\"title\":\"Ender's Game\",\"video\":false,\"vote_average\":6.6,\"vote_count\":5151},{\"adult\":false,\"backdrop_path\":null,\"genre_ids\":[27,53],\"id\":46166,\"original_language\":\"en\",\"original_title\":\"Dead Enders\",\"overview\":\"A disturbed woman, haunted by the death of her “one true love”, kidnaps and brutalizes those she believes to be his living successor. Held captive in a subterranean prison, Robert begins a fight for his survival from a sadistic captor willing to kill anyone who disturbs her suicidal plans. To save himself, Robert must survive booby- trapped mazes, implements of torture, and an evil presence which feeds his captor’s insanity and hides from the world the dark secret of “Max”.\",\"popularity\":0.713,\"poster_path\":null,\"release_date\":\"2010-11-09\",\"title\":\"Dead Enders\",\"video\":false,\"vote_average\":5.8,\"vote_count\":4},{\"adult\":false,\"backdrop_path\":null,\"genre_ids\":[27],\"id\":672555,\"original_language\":\"en\",\"original_title\":\"The Dead Enders\",\"overview\":\"A group of teenagers' paths intertwine on the night of the apocalypse.\",\"popularity\":0.614,\"poster_path\":\"/ahEm4lg9IqoQkBPRDG8usel8oBS.jpg\",\"release_date\":\"2017-02-20\",\"title\":\"The Dead Enders\",\"video\":false,\"vote_average\":0,\"vote_count\":0},{\"adult\":false,\"backdrop_path\":null,\"genre_ids\":[10770,27,18],\"id\":291279,\"original_language\":\"en\",\"original_title\":\"The Invasion of Carol Enders\",\"overview\":\"Television thriller about a woman is possessed after a brutal attack.\",\"popularity\":0.991,\"poster_path\":\"/kSL4E4vQjLX0SLUQlf4cYmz3of7.jpg\",\"release_date\":\"1973-11-05\",\"title\":\"The Invasion of Carol Enders\",\"video\":false,\"vote_average\":4,\"vote_count\":2},{\"adult\":false,\"backdrop_path\":\"/bh2W6Yw2ns0JfYLL7AX5qnLL3lE.jpg\",\"genre_ids\":[10770,10751,12],\"id\":448981,\"original_language\":\"en\",\"original_title\":\"Touch the Sun: Top Enders\",\"overview\":\"Two children get stranded in the desert in Australia's Top End.\",\"popularity\":0.6,\"poster_path\":\"/mGf1wMBtjB3Ne9xpSnLf956ru26.jpg\",\"release_date\":\"1988-04-10\",\"title\":\"Touch the Sun: Top Enders\",\"video\":false,\"vote_average\":0,\"vote_count\":0},{\"adult\":false,\"backdrop_path\":\"/oW0Dsr6dFguoNVG2XRn3DkSUfwZ.jpg\",\"genre_ids\":[16,878],\"id\":48405,\"original_language\":\"ja\",\"original_title\":\"Z.O.E 2167 IDOLO\",\"overview\":\"2167, Deep in a hidden laboratory, the Martians are testing new weapons technology that’s going to blow Earth away! Hotshot pilot Second Lieutenant Radium Lavans is taking charge of the program to lead the fight against Earth’s oppressive rule –or is the program taking charge of him?  The mineral substance used to power this secret weapon has a mind of its own! As the UNSF works to thwart a possible Martian uprising, the Orbital Frame project development team has no time to lose! Will Radium be able to force the Idolo beta unit to choose a noble destiny, or will the power of Metatron consume him completely?\",\"popularity\":1.301,\"poster_path\":\"/5hX6RPK3lb2nTfU9amMhttjszDr.jpg\",\"release_date\":\"2001-02-21\",\"title\":\"Zone of the Enders: Idolo\",\"video\":false,\"vote_average\":4.2,\"vote_count\":3},{\"adult\":false,\"backdrop_path\":\"/epyExJq0g0aa6lS2CVUX2R00g25.jpg\",\"genre_ids\":[18],\"id\":287426,\"original_language\":\"en\",\"original_title\":\"Shelter\",\"overview\":\"Hannah and Tahir fall in love while homeless on the streets of New York. Shelter explores how they got there, and as we learn about their pasts we realize they need each other to build a future.\",\"popularity\":7.968,\"poster_path\":\"/gwyH6OnsLG3ti9HdxLNy4Bg870N.jpg\",\"release_date\":\"2014-09-12\",\"title\":\"Shelter\",\"video\":false,\"vote_average\":6.1,\"vote_count\":85},{\"adult\":false,\"backdrop_path\":\"/pCdtpi15FPdXBccd3vWOyUZEF3.jpg\",\"genre_ids\":[18],\"id\":126759,\"original_language\":\"en\",\"original_title\":\"Address Unknown\",\"overview\":\"When a German art dealer living in the US returns to his native country he finds himself attracted to Nazi propaganda.\",\"popularity\":1.343,\"poster_path\":\"/eitmE8snK3kIHhbeoHqwIPRtVaB.jpg\",\"release_date\":\"1944-06-01\",\"title\":\"Address Unknown\",\"video\":false,\"vote_average\":6.6,\"vote_count\":20},{\"adult\":false,\"backdrop_path\":\"/d8hC3CjpchtQnIoN8JI6wZLcgum.jpg\",\"genre_ids\":[99,36],\"id\":805716,\"original_language\":\"fr\",\"original_title\":\"21 rue la Boétie\",\"overview\":\"\",\"popularity\":0.635,\"poster_path\":\"/d60e59mDoB0tuvp6vhzgi5L1FZK.jpg\",\"release_date\":\"2017-03-12\",\"title\":\"21 rue la Boétie\",\"video\":false,\"vote_average\":0,\"vote_count\":0},{\"adult\":false,\"backdrop_path\":\"/qqfUWCjLlDLiSlCZ12SFoTGG6Xp.jpg\",\"genre_ids\":[18],\"id\":25650,\"original_language\":\"ko\",\"original_title\":\"수취인불명\",\"overview\":\"Romances end in blood and the frail hopes of individuals are torn apart in a vile karmic continuity of colonialism, civil war and occupation. After surviving Japanese colonization, Korea became the first war zone of the Cold War. The legacy of war remains today in this divided country.\",\"popularity\":4.183,\"poster_path\":\"/bs8Ev9ZLi4n3gKo23rhGI9InBDu.jpg\",\"release_date\":\"2001-06-02\",\"title\":\"Address Unknown\",\"video\":false,\"vote_average\":7.3,\"vote_count\":58}],\"total_pages\":1,\"total_results\":10}"
+                        assertEquals(respString, response)
+                        }
         }
 
-        fun parse(json: String): JSONObject? {
-            var jsonObject: JSONObject? = null
-            try {
-                jsonObject = JSONObject(json)
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-            return jsonObject
-        }
+
 
 }

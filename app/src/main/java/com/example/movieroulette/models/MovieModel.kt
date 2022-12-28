@@ -6,4 +6,5 @@ class MovieModel {
     var rating: String = ""
     var release: String = ""
     var lang: String = ""
+    var img: String = ""
 }

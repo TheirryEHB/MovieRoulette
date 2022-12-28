@@ -1,15 +1,20 @@
 package com.example.movieroulette
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieroulette.database.RoomDBHelper
 import com.example.movieroulette.models.MovieModel
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import java.net.URLEncoder
 
 class CustomAdapter(private val dataSet: ArrayList<JSONObject>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
@@ -21,6 +26,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
         var langView: TextView
         val ratingView: TextView
         val releaseView: TextView
+        var imageView: ImageView
 
         init{
             headElement = view.findViewById(R.id.front_recycle_item)
@@ -28,6 +34,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             langView = view.findViewById(R.id.textLang)
             ratingView = view.findViewById(R.id.textRating)
             releaseView = view.findViewById(R.id.textRelease)
+            imageView = view.findViewById(R.id.imageView)
 
         }
     }
@@ -46,6 +53,9 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
         holder.langView.text = itemsData.getString("original_language")
         holder.ratingView.text = itemsData.getString("vote_average")
         holder.releaseView.text = itemsData.getString("release_date")
+//        holder.imageView.setImageURI(Uri.parse(itemsData.getString("poster_path")))
+        val url =  "https://image.tmdb.org/t/p/w500"+"poster_path"
+        Picasso.get().load(url).into(holder.imageView)
 
         holder.headElement.setOnClickListener {
             val movie = MovieModel()
@@ -54,6 +64,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             movie.name = itemsData.getString("original_title")
             movie.rating = itemsData.getString("vote_average")
             movie.release = itemsData.getString("release_date")
+            movie.img = itemsData.getString("https://image.tmdb.org/t/p/w500"+"poster_path")
 
             if (chosenMovies.size >= 5){
                 Toast.makeText(holder.headElement.context,

@@ -86,5 +86,7 @@ dependencies {
     //junit
     // Required -- JUnit 4 framework
     testImplementation "junit:junit:$jUnitVersion"
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 }

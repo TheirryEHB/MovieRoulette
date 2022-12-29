@@ -150,6 +150,7 @@ class MovieBetweenFriends : AppCompatActivity() {
         intent.putExtra("rating", themov.rating)
         intent.putExtra("release", themov.release)
         intent.putExtra("lang", themov.lang)
+        intent.putExtra("imgUrl", themov.img)
         startActivity(intent)
     }
 

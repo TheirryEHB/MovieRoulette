@@ -49,11 +49,10 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemsData = dataSet[position]
 
-        holder.titleView.text = itemsData.getString("original_title")
+        holder.titleView.text = itemsData.getString("title")
         holder.langView.text = itemsData.getString("original_language")
         holder.ratingView.text = itemsData.getString("vote_average")
         holder.releaseView.text = itemsData.getString("release_date")
-//        holder.imageView.setImageURI(Uri.parse(itemsData.getString("poster_path")))
         val url =  "https://image.tmdb.org/t/p/w500"+"poster_path"
         Picasso.get().load(url).into(holder.imageView)
 
@@ -61,10 +60,10 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             val movie = MovieModel()
             movie.id = itemsData.getString("id")
             movie.lang = itemsData.getString("original_language")
-            movie.name = itemsData.getString("original_title")
+            movie.name = itemsData.getString("title")
             movie.rating = itemsData.getString("vote_average")
             movie.release = itemsData.getString("release_date")
-            movie.img = itemsData.getString("https://image.tmdb.org/t/p/w500"+"poster_path")
+            movie.img = "https://image.tmdb.org/t/p/w500"+itemsData.getString("poster_path")
 
             if (chosenMovies.size >= 5){
                 Toast.makeText(holder.headElement.context,

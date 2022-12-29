@@ -63,7 +63,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             movie.name = itemsData.getString("title")
             movie.rating = itemsData.getString("vote_average")
             movie.release = itemsData.getString("release_date")
-            movie.img = "https://image.tmdb.org/t/p/w500"+itemsData.getString("poster_path")
+            movie.img = itemsData.getString("poster_path")
 
             if (chosenMovies.size >= 5){
                 Toast.makeText(holder.headElement.context,

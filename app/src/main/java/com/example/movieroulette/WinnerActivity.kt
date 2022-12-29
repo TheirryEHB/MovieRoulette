@@ -22,7 +22,7 @@ class WinnerActivity : AppCompatActivity() {
         val bundle : Bundle? = intent.extras
         val id = bundle!!.getString("id")
         val moviename = bundle.getString("name")
-        val url = bundle.getString("imgUrl")
+        val url = "https://image.tmdb.org/t/p/w500"+bundle.getString("imgUrl")
 
         winnertext.text = moviename
         Picasso.get().load(url).into(winnerimg)

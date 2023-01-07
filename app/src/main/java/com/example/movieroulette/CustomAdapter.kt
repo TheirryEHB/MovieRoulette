@@ -1,7 +1,6 @@
 package com.example.movieroulette
 
-import android.graphics.BitmapFactory
-import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.example.movieroulette.database.RoomDBHelper
 import com.example.movieroulette.models.MovieModel
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
-import java.net.URLEncoder
 
 class CustomAdapter(private val dataSet: ArrayList<JSONObject>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
@@ -53,7 +51,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
         holder.langView.text = itemsData.getString("original_language")
         holder.ratingView.text = itemsData.getString("vote_average")
         holder.releaseView.text = itemsData.getString("release_date")
-        val url =  "https://image.tmdb.org/t/p/w500"+"poster_path"
+        val url =  "https://image.tmdb.org/t/p/w500"+itemsData.getString("poster_path")
         Picasso.get().load(url).into(holder.imageView)
 
         holder.headElement.setOnClickListener {
@@ -65,26 +63,23 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             movie.release = itemsData.getString("release_date")
             movie.img = itemsData.getString("poster_path")
 
-            if (chosenMovies.size >= 5){
-                Toast.makeText(holder.headElement.context,
-                    "Max number of movies is 5", Toast.LENGTH_LONG).show()
-            }
-            else{
-//                if(chosenMovies.size >= 1) {
-//                    for (m in chosenMovies) {
-//                        if (m.id == movie.id)
-//                            Toast.makeText(
-//                                holder.headElement.context,
-//                                "Movie already added",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        else
-//                            chosenMovies.add(movie)
+
+            if(chosenMovies.size == 0)
+                chosenMovies.add(movie)
+            else if(chosenMovies.size >= 1 && chosenMovies.size < 5) {
+//                for (m in chosenMovies) {
+//                    if (m.id == movie.id)
+//                        Toast.makeText(holder.headElement.context,
+//                            "Movie already added", Toast.LENGTH_SHORT).show()
+//                    else{
+//                        chosenMovies.add(movie)
 //                    }
 //                }
-//                else
-                    chosenMovies.add(movie)
+                chosenMovies.add(movie)
             }
+            else
+                Toast.makeText(holder.headElement.context,
+                    "Max number of movies is 5", Toast.LENGTH_LONG).show()
         }
 
     }

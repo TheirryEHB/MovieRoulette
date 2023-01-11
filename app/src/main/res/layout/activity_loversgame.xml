@@ -10,20 +10,18 @@
         android:id="@+id/textTitle"
         android:layout_width="240dp"
         android:layout_height="26dp"
-        android:text="TextView"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/textLang"
         android:layout_width="77dp"
         android:layout_height="23dp"
-        android:text="texx"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/textTitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,8 +44,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="374dp"
-        android:layout_height="298dp"
+        android:layout_width="397dp"
+        android:layout_height="637dp"
         android:minWidth="100dp"
         android:minHeight="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,13 +60,13 @@
         android:layout_width="161dp"
         android:layout_height="23dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="5dp"
         android:minWidth="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.111" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

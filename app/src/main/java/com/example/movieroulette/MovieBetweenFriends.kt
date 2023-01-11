@@ -1,6 +1,7 @@
 package com.example.movieroulette
 
 import android.content.Intent
+import android.media.Image
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.widget.Button
 import android.widget.Chronometer
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.room.Room
@@ -17,6 +19,7 @@ import com.example.movieroulette.database.RoomDBHelper
 import com.example.movieroulette.models.FriendsGameModel
 import com.example.movieroulette.models.MovieModel
 import com.example.movieroulette.models.QnAModel
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -37,6 +40,7 @@ class MovieBetweenFriends : AppCompatActivity() {
 
     private lateinit var titleTextview: TextView
     private lateinit var questionTextview: TextView
+    private lateinit var posterView: ImageView
     var questArr: ArrayList<QnAModel> = ArrayList()
 
     //timer
@@ -52,20 +56,22 @@ class MovieBetweenFriends : AppCompatActivity() {
         titleTextview = findViewById(R.id.title_text_view)
         questionTextview = findViewById(R.id.question_text_view)
         view_timer = findViewById(R.id.view_timer)
+        posterView = findViewById<ImageView>(R.id.posterView)
+
 
 
         val yesButton = findViewById<Button>(R.id.yes_button)
         val noButton = findViewById<Button>(R.id.no_button)
         yesButton.setOnClickListener {
             view_timer.stop()
-            if (elapsedTime > maxTime)
-                elapsedTime = maxTime
+//            if (elapsedTime > maxTime)
+//                elapsedTime = maxTime
             checkAnswer("true")
         }
         noButton.setOnClickListener {
             view_timer.stop()
-            if (elapsedTime > maxTime)
-                elapsedTime = maxTime
+//            if (elapsedTime > maxTime)
+//                elapsedTime = maxTime
             checkAnswer("false")
         }
 
@@ -83,7 +89,8 @@ class MovieBetweenFriends : AppCompatActivity() {
         view_timer.base = SystemClock.elapsedRealtime() + 10000
         view_timer.setOnChronometerTickListener {
             ++elapsedTime
-            if(view_timer.base == SystemClock.elapsedRealtime()){
+            if(SystemClock.elapsedRealtime() >= view_timer.base){
+                view_timer.stop()
                 checkAnswer("none")
             }
         }
@@ -93,6 +100,13 @@ class MovieBetweenFriends : AppCompatActivity() {
         if (ans == currentGame.Answer){
             currentGame.DidAns = true
             currentGame.isRight = true
+            currentGame.AnswerTime = elapsedTime
+            Log.d("elapsedTime", elapsedTime.toString())
+            updateGame()
+        }
+        else if(ans == "none"){
+            currentGame.DidAns = false
+            currentGame.isRight = false
             currentGame.AnswerTime = elapsedTime
             updateGame()
         }
@@ -157,8 +171,15 @@ class MovieBetweenFriends : AppCompatActivity() {
     private fun fillInView(){
         GlobalScope.launch(Dispatchers.Main) {
             currentGame = gameArray[gameIndex]
+            var themov = MovieModel()
+            RoomDBHelper.chosenMovieArr.forEach {
+                if(it.name == currentGame.MovieName)
+                    themov = it
+            }
             titleTextview.text = gameArray[gameIndex].MovieName
             questionTextview.text = gameArray[gameIndex].Question
+            val url =  "https://image.tmdb.org/t/p/w500"+ themov.img
+            Picasso.get().load(url).into(posterView)
             view_timer.start()
         }
     }

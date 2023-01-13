@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val searchEditText: EditText = findViewById(R.id.search_edit_text)
 //        val parentView = findViewById<ConstraintLayout>(R.id.main_constraint)
 
-        searchBar.visibility = View.INVISIBLE
+        searchBar.visibility = View.GONE
 //        val params = recyclerView.layoutParams as ConstraintLayout.LayoutParams
 //        params.topToTop = parentView.id
 //        recyclerView.requestLayout()

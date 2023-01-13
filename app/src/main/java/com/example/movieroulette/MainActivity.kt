@@ -153,7 +153,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.Search -> {
-                searchBar.visibility = View.VISIBLE
+                if(searchBar.visibility == View.VISIBLE)
+                    searchBar.visibility = View.GONE
+                else
+                    searchBar.visibility = View.VISIBLE
                 return true
             }
             else -> {

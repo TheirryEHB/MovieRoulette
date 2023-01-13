@@ -19,6 +19,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     //Gebruik van JUnit-framework voor het schrijven van testen voor je applicatie (minimum 1)
     //Correcte toepassing van de navigation design patterns binnen Android
     //Ondersteuning voor minstens Engels en een andere taal naar keuze.
+    //TODO zelfde film in set
 
     private val data = ArrayList<JSONObject>()
     private lateinit var searchBar:LinearLayout
@@ -119,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         return getBaseURL()+"trending/movie/day?"+getAPIKey()
     }
     fun getMovieSearch(title: String): String{
-        return getBaseURL()+"search/movie?"+getAPIKey()+"&language=en-US&query="+title+"&page=1&include_adult=false"
+        return getBaseURL()+"search/movie?"+getAPIKey()+"&language=en-US&query="+title+"&page=1&include_adult=true"
     }
 
     fun parse(json: String): JSONObject? {
@@ -159,5 +161,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onBackPressed() {
+        this@MainActivity.finish()
+        exitProcess(0)
     }
 }

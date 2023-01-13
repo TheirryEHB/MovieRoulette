@@ -11,7 +11,7 @@
         android:layout_width="470dp"
         android:layout_height="34dp"
         android:text="TextView"
-        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
@@ -24,7 +24,7 @@
         android:layout_width="77dp"
         android:layout_height="23dp"
         android:text="texx"
-        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="@+id/textTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.737"

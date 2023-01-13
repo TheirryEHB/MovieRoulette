@@ -10,7 +10,7 @@
         android:id="@+id/textTitle"
         android:layout_width="240dp"
         android:layout_height="26dp"
-        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
@@ -22,7 +22,7 @@
         android:id="@+id/textLang"
         android:layout_width="77dp"
         android:layout_height="23dp"
-        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="@+id/textTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.801"

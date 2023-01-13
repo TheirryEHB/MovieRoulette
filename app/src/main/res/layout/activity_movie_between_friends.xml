@@ -14,7 +14,7 @@
 
 
         android:text="@string/question_for"
-        android:textColor="@color/white"
+
         android:textSize="30sp"
         android:textStyle="bold"
 

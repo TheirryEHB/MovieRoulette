@@ -1,5 +1,6 @@
 package com.example.movieroulette
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
         return ViewHolder(view)
     }
 
+    private var forcusedItem: Int = 0
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemsData = dataSet[position]
 
@@ -63,19 +65,20 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
             movie.release = itemsData.getString("release_date")
             movie.img = itemsData.getString("poster_path")
 
-
-            if(chosenMovies.size == 0)
-                chosenMovies.add(movie)
-            else if(chosenMovies.size >= 1 && chosenMovies.size < 5) {
-//                for (m in chosenMovies) {
-//                    if (m.id == movie.id)
-//                        Toast.makeText(holder.headElement.context,
-//                            "Movie already added", Toast.LENGTH_SHORT).show()
-//                    else{
-//                        chosenMovies.add(movie)
-//                    }
-//                }
-                chosenMovies.add(movie)
+           if(chosenMovies.size < 5) {
+               val alreadyIn = chosenMovies.firstOrNull{ it.id == movie.id }
+               if (alreadyIn == null){
+                   chosenMovies.add(movie)
+                   holder.headElement.setBackgroundColor(Color.GREEN)
+               }
+               else{
+                   val indx = chosenMovies.indexOf(movie)
+                   if(indx != -1)
+                    chosenMovies.removeAt(indx)
+//                   holder.headElement.setBackgroundColor(Color.WHITE)
+               }
+               Log.d("STATE", alreadyIn.toString())
+               Log.d("SIZE", chosenMovies.size.toString())
             }
             else
                 Toast.makeText(holder.headElement.context,

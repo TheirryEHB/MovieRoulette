@@ -74,7 +74,7 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
                else{
                    val indx = chosenMovies.indexOf(movie)
                    if(indx != -1)
-                    chosenMovies.removeAt(indx)
+                    chosenMovies.clear()
 //                   holder.headElement.setBackgroundColor(Color.WHITE)
                }
                Log.d("STATE", alreadyIn.toString())

@@ -1,6 +1,7 @@
 package com.example.movieroulette
 
 import android.graphics.Color
+import android.system.Os.remove
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ class CustomAdapter(private val dataSet: ArrayList<JSONObject>):
 RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
     var chosenMovies = RoomDBHelper.chosenMovieArr
+//    var chosenMovies = mutableListOf<MovieModel>()
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         var headElement: ConstraintLayout
         var titleView: TextView
@@ -72,13 +74,13 @@ RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
                    holder.headElement.setBackgroundColor(Color.GREEN)
                }
                else{
-                   val indx = chosenMovies.indexOf(movie)
-                   if(indx != -1)
-                    chosenMovies.clear()
-//                   holder.headElement.setBackgroundColor(Color.WHITE)
+                   for(index in 0 until chosenMovies.size){
+                       if (chosenMovies[index].id == movie.id){
+                           chosenMovies.removeAt(index)
+                           holder.headElement.setBackgroundColor(Color.WHITE)
+                       }
+                   }
                }
-               Log.d("STATE", alreadyIn.toString())
-               Log.d("SIZE", chosenMovies.size.toString())
             }
             else
                 Toast.makeText(holder.headElement.context,

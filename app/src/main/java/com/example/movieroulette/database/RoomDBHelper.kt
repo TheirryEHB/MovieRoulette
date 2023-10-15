@@ -1,5 +1,6 @@
 package com.example.movieroulette.database
 
+import android.text.method.MovementMethod
 import android.util.Log
 import androidx.room.*
 import androidx.room.migration.AutoMigrationSpec
@@ -12,7 +13,7 @@ class RoomDBHelper {
     var db: RoomDatabase? = null
         get() { return field }
     companion object {
-        var chosenMovieArr: ArrayList<MovieModel> = ArrayList()
+        var chosenMovieArr = mutableListOf<MovieModel>()
 
         fun parse(json: String): JSONObject? {
             var jsonObject: JSONObject? = null
